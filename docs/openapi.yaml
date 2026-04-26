@@ -1,0 +1,260 @@
+openapi: 3.1.0
+info:
+  title: Forge Fitness API
+  version: 1.0.0
+  description: REST API for workout templates, scheduled sessions, exercise catalog, and reporting.
+servers:
+  - url: http://localhost:3000
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: workout-tracker-session
+  schemas:
+    AuthUser:
+      type: object
+      properties:
+        id: { type: string }
+        email: { type: string, format: email }
+        displayName: { type: string }
+        createdAt: { type: string, format: date-time }
+    Exercise:
+      type: object
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        description: { type: string }
+        category: { type: string }
+        muscleGroup: { type: string }
+        equipment: { type: [string, "null"] }
+    WorkoutTemplateExerciseInput:
+      type: object
+      required: [exerciseId, sortOrder, targetSets, targetReps, targetWeight]
+      properties:
+        exerciseId: { type: string }
+        sortOrder: { type: integer }
+        targetSets: { type: integer }
+        targetReps: { type: integer }
+        targetWeight: { type: number }
+        restSeconds: { type: [integer, "null"] }
+        notes: { type: [string, "null"] }
+    WorkoutSessionExerciseInput:
+      type: object
+      required: [exerciseId, sortOrder, plannedSets, plannedReps, plannedWeight]
+      properties:
+        exerciseId: { type: string }
+        sortOrder: { type: integer }
+        plannedSets: { type: integer }
+        plannedReps: { type: integer }
+        plannedWeight: { type: number }
+        actualSets: { type: [integer, "null"] }
+        actualReps: { type: [integer, "null"] }
+        actualWeight: { type: [number, "null"] }
+        notes: { type: [string, "null"] }
+    ApiError:
+      type: object
+      properties:
+        message: { type: string }
+        code: { type: string }
+        fieldErrors:
+          type: object
+          additionalProperties:
+            type: array
+            items: { type: string }
+paths:
+  /api/auth/signup:
+    post:
+      summary: Create a new account and set the session cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              displayName: Alex
+              email: alex@example.com
+              password: Training123
+      responses:
+        "201":
+          description: Created
+  /api/auth/login:
+    post:
+      summary: Log in and set the session cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              email: alex@example.com
+              password: Training123
+      responses:
+        "200":
+          description: Logged in
+  /api/auth/logout:
+    post:
+      summary: Clear the session cookie.
+      responses:
+        "204":
+          description: Logged out
+  /api/auth/me:
+    get:
+      summary: Return the currently authenticated user.
+      responses:
+        "200":
+          description: Current user payload
+  /api/exercises:
+    get:
+      summary: List seeded exercises.
+      parameters:
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: muscleGroup
+          schema: { type: string }
+        - in: query
+          name: search
+          schema: { type: string }
+      responses:
+        "200":
+          description: Exercise catalog
+  /api/workout-templates:
+    get:
+      summary: List templates for the current user.
+      security: [{ sessionCookie: [] }]
+      responses:
+        "200":
+          description: Template collection
+    post:
+      summary: Create a new template.
+      security: [{ sessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              name: Push Day A
+              description: Heavy horizontal press focus
+              exercises:
+                - exerciseId: ex_1
+                  sortOrder: 0
+                  targetSets: 4
+                  targetReps: 6
+                  targetWeight: 80
+      responses:
+        "201":
+          description: Template created
+  /api/workout-templates/{id}:
+    get:
+      summary: Get a single template.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Template detail
+    patch:
+      summary: Update a template.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Template updated
+    delete:
+      summary: Delete a template.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Template deleted
+  /api/workout-sessions:
+    get:
+      summary: List sessions for the current user.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: query
+          name: status
+          schema: { type: string }
+        - in: query
+          name: from
+          schema: { type: string, format: date-time }
+        - in: query
+          name: to
+          schema: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Session collection
+    post:
+      summary: Create a scheduled session from a template or custom exercise list.
+      security: [{ sessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              name: Monday Push
+              scheduledAt: 2026-04-27T06:00:00.000Z
+              templateId: tpl_123
+      responses:
+        "201":
+          description: Session created
+  /api/workout-sessions/{id}:
+    get:
+      summary: Get a session detail record.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Session detail
+    patch:
+      summary: Update schedule, comments, status, or logged exercise results.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Session updated
+    delete:
+      summary: Delete a session.
+      security: [{ sessionCookie: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Session deleted
+  /api/reports/summary:
+    get:
+      summary: Get high-level training summary metrics.
+      security: [{ sessionCookie: [] }]
+      responses:
+        "200":
+          description: Summary report
+  /api/reports/progress:
+    get:
+      summary: Get per-exercise progress aggregates.
+      security: [{ sessionCookie: [] }]
+      responses:
+        "200":
+          description: Progress report

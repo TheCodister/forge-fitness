@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ExerciseCategory {
+  cardio
+  strength
+  flexibility
+  mobility
+  conditioning
+}
+
+enum MuscleGroup {
+  chest
+  back
+  legs
+  shoulders
+  arms
+  core
+  full_body
+}
+
+enum WorkoutStatus {
+  scheduled
+  in_progress
+  completed
+  cancelled
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String            @unique
+  passwordHash     String
+  displayName      String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  workoutTemplates WorkoutTemplate[]
+  workoutSessions  WorkoutSession[]
+}
+
+model Exercise {
+  id                       String                    @id @default(cuid())
+  slug                     String                    @unique
+  name                     String
+  description              String
+  category                 ExerciseCategory
+  muscleGroup              MuscleGroup
+  equipment                String?
+  isActive                 Boolean                   @default(true)
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  workoutTemplateExercises WorkoutTemplateExercise[]
+  workoutSessionExercises  WorkoutSessionExercise[]
+}
+
+model WorkoutTemplate {
+  id          String                    @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  isArchived  Boolean                   @default(false)
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+  user        User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises   WorkoutTemplateExercise[]
+  sessions    WorkoutSession[]
+
+  @@index([userId])
+}
+
+model WorkoutTemplateExercise {
+  id           String          @id @default(cuid())
+  templateId   String
+  exerciseId   String
+  sortOrder    Int
+  targetSets   Int
+  targetReps   Int
+  targetWeight Float
+  restSeconds  Int?
+  notes        String?
+  template     WorkoutTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  exercise     Exercise        @relation(fields: [exerciseId], references: [id])
+
+  @@unique([templateId, sortOrder])
+  @@index([templateId])
+}
+
+model WorkoutSession {
+  id          String                   @id @default(cuid())
+  userId      String
+  templateId  String?
+  name        String
+  status      WorkoutStatus            @default(scheduled)
+  scheduledAt DateTime
+  startedAt   DateTime?
+  completedAt DateTime?
+  comments    String?
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  user        User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  template    WorkoutTemplate?         @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  exercises   WorkoutSessionExercise[]
+
+  @@index([userId, scheduledAt])
+  @@index([status, scheduledAt])
+}
+
+model WorkoutSessionExercise {
+  id            String         @id @default(cuid())
+  sessionId     String
+  exerciseId    String
+  sortOrder     Int
+  plannedSets   Int
+  plannedReps   Int
+  plannedWeight Float
+  actualSets    Int?
+  actualReps    Int?
+  actualWeight  Float?
+  notes         String?
+  session       WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise      Exercise       @relation(fields: [exerciseId], references: [id])
+
+  @@unique([sessionId, sortOrder])
+  @@index([sessionId, sortOrder])
+}
