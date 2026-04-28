@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, CalendarClock, Dumbbell, LineChart } from "lucide-react";
+import { Activity, CalendarClock, Dumbbell, LineChart, BookOpen } from "lucide-react";
 
 import { LogoutButton } from "@/components/layout/logout-button";
 import { APP_NAME } from "@/lib/constants";
@@ -9,6 +9,7 @@ const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: Activity },
   { href: "/workouts", label: "Workouts", icon: CalendarClock },
   { href: "/templates", label: "Templates", icon: Dumbbell },
+  { href: "/exercises", label: "Exercises", icon: BookOpen },
   { href: "/reports", label: "Reports", icon: LineChart },
 ];
 

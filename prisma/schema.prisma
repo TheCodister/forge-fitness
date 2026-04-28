@@ -52,6 +52,11 @@ model Exercise {
   muscleGroup              MuscleGroup
   equipment                String?
   isActive                 Boolean                   @default(true)
+  exerciseDbId             String?                   @unique
+  gifUrl                   String?
+  instructions             Json?
+  targetMuscle             String?
+  secondaryMuscles         Json?
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt
   workoutTemplateExercises WorkoutTemplateExercise[]

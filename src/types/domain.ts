@@ -14,6 +14,11 @@ export type Exercise = {
   muscleGroup: string;
   equipment: string | null;
   isActive: boolean;
+  exerciseDbId: string | null;
+  gifUrl: string | null;
+  instructions: string[] | null;
+  targetMuscle: string | null;
+  secondaryMuscles: string[] | null;
   createdAt: string | Date;
   updatedAt: string | Date;
 };

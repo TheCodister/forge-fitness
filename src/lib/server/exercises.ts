@@ -19,6 +19,8 @@ export async function listExercises(query: unknown) {
         : undefined,
     },
     orderBy: { name: "asc" },
+    take: parsed.limit,
+    skip: parsed.offset,
   });
 }
 

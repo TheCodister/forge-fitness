@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { WorkoutForm } from "@/features/workouts/components/workout-form";
 import { getCurrentUser } from "@/lib/server/auth";
 import { getWorkoutSession } from "@/lib/server/workouts";
+import type { WorkoutSession } from "@/types/domain";
 
 export default async function WorkoutDetailPage({
   params,
@@ -26,7 +27,7 @@ export default async function WorkoutDetailPage({
   return (
     <div className="space-y-8">
       <PageHeader title={session.name} description="Update timing, comments, status, or recorded exercise results." />
-      <WorkoutForm session={session} />
+      <WorkoutForm session={session as unknown as WorkoutSession} />
     </div>
   );
 }

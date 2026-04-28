@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
       category: searchParams.get("category") ?? undefined,
       muscleGroup: searchParams.get("muscleGroup") ?? undefined,
       search: searchParams.get("search") ?? undefined,
+      limit: searchParams.get("limit") ?? undefined,
+      offset: searchParams.get("offset") ?? undefined,
     });
 
     return jsonOk(exercises);

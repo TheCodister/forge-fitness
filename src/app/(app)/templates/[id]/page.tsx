@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { TemplateForm } from "@/features/templates/components/template-form";
 import { getCurrentUser } from "@/lib/server/auth";
 import { getWorkoutTemplate } from "@/lib/server/workouts";
+import type { WorkoutTemplate } from "@/types/domain";
 
 export default async function TemplateDetailPage({
   params,
@@ -26,7 +27,7 @@ export default async function TemplateDetailPage({
   return (
     <div className="space-y-8">
       <PageHeader title={template.name} description="Adjust exercise order, targets, and notes for future scheduled sessions." />
-      <TemplateForm template={template} />
+      <TemplateForm template={template as unknown as WorkoutTemplate} />
     </div>
   );
 }
