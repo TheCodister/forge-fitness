@@ -22,17 +22,28 @@ function getHeaders() {
   };
 }
 
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function fetchWithRetry(url: string, options: RequestInit, retries = 3): Promise<Response> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const res = await fetch(url, options);
+    if (res.status !== 429) return res;
+    const wait = Math.pow(2, attempt) * 1000;
+    await delay(wait);
+  }
+  throw new Error("ExerciseDB rate limit exceeded after retries");
+}
+
 export async function fetchExerciseDbAll(): Promise<ExerciseDbExercise[]> {
   const all: ExerciseDbExercise[] = [];
   let offset = 0;
-  // Basic plan max = 10 per request
   const limit = 10;
 
   while (true) {
-    const res = await fetch(`${BASE_URL}/exercises?limit=${limit}&offset=${offset}`, {
-      headers: getHeaders(),
-      cache: "no-store",
-    });
+    const res = await fetchWithRetry(
+      `${BASE_URL}/exercises?limit=${limit}&offset=${offset}`,
+      { headers: getHeaders(), cache: "no-store" }
+    );
 
     if (!res.ok) {
       throw new Error(`ExerciseDB responded with ${res.status}: ${await res.text()}`);
@@ -43,6 +54,7 @@ export async function fetchExerciseDbAll(): Promise<ExerciseDbExercise[]> {
     all.push(...batch);
     if (batch.length < limit) break;
     offset += limit;
+    await delay(500);
   }
 
   return all;
@@ -61,7 +73,3 @@ export async function fetchExerciseDbById(id: string): Promise<ExerciseDbExercis
   return res.json() as Promise<ExerciseDbExercise>;
 }
 
-export function getExerciseImageUrl(exerciseDbId: string, resolution: 180 | 360 = 180): string {
-  const key = process.env.EXERCISEDB_API_KEY;
-  return `${BASE_URL}/image?exerciseId=${exerciseDbId}&resolution=${resolution}&rapidapi-key=${key}`;
-}

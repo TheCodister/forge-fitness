@@ -38,7 +38,7 @@ function capitalize(s: string) {
 }
 
 function toProxyGifUrl(exerciseDbId: string): string {
-  return `/api/exercises/image?exerciseId=${exerciseDbId}`;
+  return `/api/exercise-image/${exerciseDbId}`;
 }
 
 export async function POST() {
