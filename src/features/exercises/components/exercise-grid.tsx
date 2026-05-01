@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useExercises, EXERCISES_PAGE_SIZE } from "@/features/exercises/api/use-exercises";
+import {
+  EXERCISES_PAGE_SIZE,
+  useExercises,
+} from "@/features/exercises/api/use-exercises";
 import { ExerciseDetailDialog } from "@/features/exercises/components/exercise-detail-dialog";
 import type { Exercise } from "@/types/domain";
 
@@ -43,12 +46,18 @@ export function ExerciseGrid() {
     setPage(0);
   }
 
-  const { data: exercises, isLoading, isFetching } = useExercises({
+  const {
+    data: exercises,
+    isLoading,
+    isFetching,
+  } = useExercises({
     search: debouncedSearch || undefined,
     muscleGroup: muscleGroup || undefined,
     page,
   });
 
+  const visibleExercises =
+    exercises?.filter((exercise) => !!exercise.gifUrl) ?? [];
   const hasNext = (exercises?.length ?? 0) === EXERCISES_PAGE_SIZE;
   const hasPrev = page > 0;
 
@@ -91,34 +100,35 @@ export function ExerciseGrid() {
         </div>
       )}
 
-      {!isLoading && exercises?.length === 0 && (
+      {!isLoading && visibleExercises.length === 0 && (
         <div className="flex h-40 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-sm text-zinc-500">
           No exercises found.
         </div>
       )}
 
-      {!isLoading && exercises && exercises.length > 0 && (
-        <div className={`space-y-6 transition-opacity ${isFetching ? "opacity-60" : "opacity-100"}`}>
+      {!isLoading && visibleExercises.length > 0 && (
+        <div
+          className={`space-y-6 transition-opacity ${isFetching ? "opacity-60" : "opacity-100"}`}
+        >
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {exercises.map((exercise) => (
+            {visibleExercises.map((exercise) => (
               <button
                 key={exercise.id}
                 type="button"
-                onClick={() => { setSelected(exercise); setDialogOpen(true); }}
+                onClick={() => {
+                  setSelected(exercise);
+                  setDialogOpen(true);
+                }}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 text-left transition hover:border-orange-400/30 hover:bg-orange-500/5"
               >
                 <div className="flex h-44 items-center justify-center bg-black/60 p-4">
-                  {exercise.gifUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={exercise.gifUrl}
-                      alt={exercise.name}
-                      className="h-full w-full object-contain"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="h-full w-full rounded-xl bg-white/5" />
-                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={exercise.gifUrl!}
+                    alt={exercise.name}
+                    className="h-full w-full object-contain"
+                    loading="eager"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-4">
                   <p className="text-sm font-medium leading-snug text-white group-hover:text-orange-200">
@@ -161,7 +171,11 @@ export function ExerciseGrid() {
         </div>
       )}
 
-      <ExerciseDetailDialog exercise={selected} open={dialogOpen} onOpenChange={setDialogOpen} />
+      <ExerciseDetailDialog
+        exercise={selected}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 }
