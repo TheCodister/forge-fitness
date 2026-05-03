@@ -1,7 +1,7 @@
 "use client";
 
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -62,31 +62,30 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
       name: session?.name ?? "",
       scheduledAt: toDateInputValue(session?.scheduledAt),
       comments: session?.comments ?? "",
-      status: session?.status ?? "scheduled",
-      exercises:
-        session?.exercises.map((exercise, index) => ({
-          exerciseId: exercise.exerciseId,
-          sortOrder: index,
-          plannedSets: exercise.plannedSets,
-          plannedReps: exercise.plannedReps,
-          plannedWeight: exercise.plannedWeight,
-          actualSets: exercise.actualSets ?? null,
-          actualReps: exercise.actualReps ?? null,
-          actualWeight: exercise.actualWeight ?? null,
-          notes: exercise.notes ?? "",
-        })) ?? [
-          {
-            exerciseId: "",
-            sortOrder: 0,
-            plannedSets: 3,
-            plannedReps: 10,
-            plannedWeight: 0,
-            actualSets: null,
-            actualReps: null,
-            actualWeight: null,
-            notes: "",
-          },
-        ],
+      status: session?.status ?? "Scheduled",
+      exercises: session?.exercises.map((exercise, index) => ({
+        exerciseId: exercise.exerciseId,
+        sortOrder: index,
+        plannedSets: exercise.plannedSets,
+        plannedReps: exercise.plannedReps,
+        plannedWeight: exercise.plannedWeight,
+        actualSets: exercise.actualSets ?? null,
+        actualReps: exercise.actualReps ?? null,
+        actualWeight: exercise.actualWeight ?? null,
+        notes: exercise.notes ?? "",
+      })) ?? [
+        {
+          exerciseId: "",
+          sortOrder: 0,
+          plannedSets: 3,
+          plannedReps: 10,
+          plannedWeight: 0,
+          actualSets: null,
+          actualReps: null,
+          actualWeight: null,
+          notes: "",
+        },
+      ],
     },
   });
 
@@ -135,7 +134,9 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
       <Card className="border-white/10 bg-zinc-950/70 text-white">
         <CardHeader>
-          <CardTitle>{session ? "Edit workout session" : "Schedule a workout"}</CardTitle>
+          <CardTitle>
+            {session ? "Edit workout session" : "Schedule a workout"}
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
@@ -179,10 +180,10 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
               className="h-10 w-full rounded-md border border-white/10 bg-black px-3 text-sm text-white"
               {...form.register("status")}
             >
-              <option value="scheduled">scheduled</option>
-              <option value="in_progress">in_progress</option>
-              <option value="completed">completed</option>
-              <option value="cancelled">cancelled</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
             </select>
           </div>
           <div className="space-y-2 md:col-span-2">
@@ -233,9 +234,12 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
                   <label className="text-sm text-zinc-300">Exercise</label>
                   <select
                     className="h-10 w-full rounded-md border border-white/10 bg-black px-3 text-sm text-white"
-                    {...form.register(`exercises.${index}.exerciseId` as const, {
-                      required: true,
-                    })}
+                    {...form.register(
+                      `exercises.${index}.exerciseId` as const,
+                      {
+                        required: true,
+                      },
+                    )}
                   >
                     <option value="">Select exercise</option>
                     {exercises?.map((exercise) => (
@@ -250,9 +254,12 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
                   <Input
                     type="number"
                     className="border-white/10 bg-white/5 text-white"
-                    {...form.register(`exercises.${index}.plannedSets` as const, {
-                      valueAsNumber: true,
-                    })}
+                    {...form.register(
+                      `exercises.${index}.plannedSets` as const,
+                      {
+                        valueAsNumber: true,
+                      },
+                    )}
                   />
                 </div>
                 <div className="space-y-2">
@@ -260,9 +267,12 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
                   <Input
                     type="number"
                     className="border-white/10 bg-white/5 text-white"
-                    {...form.register(`exercises.${index}.plannedReps` as const, {
-                      valueAsNumber: true,
-                    })}
+                    {...form.register(
+                      `exercises.${index}.plannedReps` as const,
+                      {
+                        valueAsNumber: true,
+                      },
+                    )}
                   />
                 </div>
                 <div className="space-y-2">
@@ -270,9 +280,12 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
                   <Input
                     type="number"
                     className="border-white/10 bg-white/5 text-white"
-                    {...form.register(`exercises.${index}.plannedWeight` as const, {
-                      valueAsNumber: true,
-                    })}
+                    {...form.register(
+                      `exercises.${index}.plannedWeight` as const,
+                      {
+                        valueAsNumber: true,
+                      },
+                    )}
                   />
                 </div>
                 <div className="flex items-end">
@@ -292,13 +305,17 @@ export function WorkoutForm({ session }: { session?: WorkoutSession }) {
       ) : (
         <Card className="border-white/10 bg-zinc-950/70 text-white">
           <CardContent className="pt-6 text-sm text-zinc-400">
-            This session will copy exercises from the selected template when it is created.
+            This session will copy exercises from the selected template when it
+            is created.
           </CardContent>
         </Card>
       )}
 
       <div className="flex gap-3">
-        <Button type="submit" className="bg-orange-500 text-black hover:bg-orange-400">
+        <Button
+          type="submit"
+          className="bg-orange-500 text-black hover:bg-orange-400"
+        >
           {session ? "Save workout" : "Schedule workout"}
         </Button>
         <Button

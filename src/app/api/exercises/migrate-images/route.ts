@@ -1,5 +1,27 @@
 import { prisma } from "@/lib/db/prisma";
+import { getExerciseImageUrl } from "@/lib/exercise-images";
 import { handleRouteError, jsonOk } from "@/lib/http";
+
+const MIGRATE_CONCURRENCY = 12;
+
+async function runWithConcurrency<T>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<void>
+) {
+  let index = 0;
+
+  async function runWorker() {
+    while (index < items.length) {
+      const current = items[index++];
+      await worker(current);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, () => runWorker())
+  );
+}
 
 export async function POST() {
   try {
@@ -9,13 +31,14 @@ export async function POST() {
     });
 
     let updated = 0;
-    for (const ex of exercises) {
+
+    await runWithConcurrency(exercises, MIGRATE_CONCURRENCY, async (ex) => {
       await prisma.exercise.update({
         where: { id: ex.id },
-        data: { gifUrl: `/api/exercise-image/${ex.exerciseDbId}` },
+        data: { gifUrl: getExerciseImageUrl(ex.exerciseDbId!) },
       });
       updated++;
-    }
+    });
 
     return jsonOk({ updated });
   } catch (error) {

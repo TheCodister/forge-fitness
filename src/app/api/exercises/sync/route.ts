@@ -1,6 +1,7 @@
 import { ExerciseCategory, MuscleGroup } from "@/generated/prisma/client";
 import { fetchExerciseDbAll } from "@/lib/exercisedb";
 import { prisma } from "@/lib/db/prisma";
+import { getExerciseImageUrl } from "@/lib/exercise-images";
 import { handleRouteError, jsonOk } from "@/lib/http";
 import type { ExerciseDbExercise } from "@/lib/exercisedb";
 
@@ -38,7 +39,28 @@ function capitalize(s: string) {
 }
 
 function toProxyGifUrl(exerciseDbId: string): string {
-  return `/api/exercise-image/${exerciseDbId}`;
+  return getExerciseImageUrl(exerciseDbId);
+}
+
+const SYNC_CONCURRENCY = 8;
+
+async function runWithConcurrency<T>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<void>
+) {
+  let index = 0;
+
+  async function runWorker() {
+    while (index < items.length) {
+      const current = items[index++];
+      await worker(current);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, () => runWorker())
+  );
 }
 
 export async function POST() {
@@ -46,7 +68,7 @@ export async function POST() {
     const exercises = await fetchExerciseDbAll();
     let upserted = 0;
 
-    for (const ex of exercises) {
+    await runWithConcurrency(exercises, SYNC_CONCURRENCY, async (ex) => {
       const slug = `edb-${ex.id}`;
       const description = ex.description || ex.instructions[0] || ex.name;
 
@@ -79,7 +101,7 @@ export async function POST() {
       });
 
       upserted++;
-    }
+    });
 
     return jsonOk({ upserted, total: exercises.length });
   } catch (error) {

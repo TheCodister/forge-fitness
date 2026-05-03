@@ -14,6 +14,14 @@ type ExerciseQuery = {
   page?: number;
 };
 
+type ExerciseImageListResponse = {
+  images: Array<{
+    exerciseId: string;
+    imageUrl: string;
+  }>;
+  total: number;
+};
+
 export function useExercises(query?: ExerciseQuery) {
   const page = query?.page ?? 0;
   const params = new URLSearchParams();
@@ -25,7 +33,47 @@ export function useExercises(query?: ExerciseQuery) {
 
   return useQuery({
     queryKey: ["exercises", query],
-    queryFn: () => apiFetch<Exercise[]>(`/api/exercises?${params.toString()}`),
+    queryFn: async () => {
+      const exercises = await apiFetch<Exercise[]>(`/api/exercises?${params.toString()}`);
+      const exerciseIds = Array.from(
+        new Set(
+          exercises
+            .map((exercise) => exercise.exerciseDbId)
+            .filter((id): id is string => !!id)
+        )
+      );
+
+      if (exerciseIds.length === 0) {
+        return exercises;
+      }
+
+      const imageParams = new URLSearchParams({
+        exerciseIds: exerciseIds.join(","),
+      });
+      const imageResponse = await apiFetch<ExerciseImageListResponse>(
+        `/api/exercises/image?${imageParams.toString()}`
+      );
+
+      const imageByExerciseId = new Map(
+        imageResponse.images.map((image) => [image.exerciseId, image.imageUrl])
+      );
+
+      return exercises.map((exercise) => {
+        if (!exercise.exerciseDbId) {
+          return exercise;
+        }
+
+        const imageUrl = imageByExerciseId.get(exercise.exerciseDbId);
+        if (!imageUrl) {
+          return exercise;
+        }
+
+        return {
+          ...exercise,
+          gifUrl: imageUrl,
+        };
+      });
+    },
     placeholderData: (prev) => prev,
   });
 }

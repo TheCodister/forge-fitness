@@ -65,7 +65,7 @@ export type WorkoutSession = {
   userId: string;
   templateId: string | null;
   name: string;
-  status: "scheduled" | "in_progress" | "completed" | "cancelled";
+  status: "Scheduled" | "In Progress" | "Completed" | "Cancelled";
   scheduledAt: string | Date;
   startedAt: string | Date | null;
   completedAt: string | Date | null;

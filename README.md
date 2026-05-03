@@ -65,7 +65,7 @@ Forge Fitness is a comprehensive workout tracking and management system built wi
 - **Database**: [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
 - **Authentication**: [jose](https://github.com/panva/jose) for JWT handling
 - **Password Hashing**: [bcryptjs](https://github.com/dcodeIO/bcrypt.js)
-- **File Parsing**: [mammoth](https://github.com/mwilson/mammoth.js) (DOCX) and [pdf-parse](https://github.com/modesty/pdf-parse)
+
 
 ### Database
 
@@ -183,7 +183,7 @@ forge-fitness/
 - Node.js (v18+)
 - pnpm (or npm/yarn/bun)
 - PostgreSQL database
-- Supabase account (for authentication) - _optional for local development_
+
 
 ### Installation
 

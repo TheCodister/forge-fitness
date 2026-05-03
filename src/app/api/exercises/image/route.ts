@@ -1,10 +1,38 @@
 import type { NextRequest } from "next/server";
+import { getExerciseImageUrl } from "@/lib/exercise-images";
+import { jsonOk } from "@/lib/http";
+
+const MAX_BATCH_SIZE = 100;
 
 export async function GET(request: NextRequest) {
+  const exerciseIdsParam = request.nextUrl.searchParams.get("exerciseIds");
   const exerciseId = request.nextUrl.searchParams.get("exerciseId");
 
+  if (exerciseIdsParam) {
+    const exerciseIds = Array.from(
+      new Set(
+        exerciseIdsParam
+          .split(",")
+          .map((id) => id.trim())
+          .filter(Boolean)
+      )
+    ).slice(0, MAX_BATCH_SIZE);
+
+    if (exerciseIds.length === 0) {
+      return new Response("Missing exerciseIds", { status: 400 });
+    }
+
+    return jsonOk({
+      images: exerciseIds.map((id) => ({
+        exerciseId: id,
+        imageUrl: getExerciseImageUrl(id),
+      })),
+      total: exerciseIds.length,
+    });
+  }
+
   if (!exerciseId) {
-    return new Response("Missing exerciseId", { status: 400 });
+    return new Response("Missing exerciseId or exerciseIds", { status: 400 });
   }
 
   const apiKey = process.env.EXERCISEDB_API_KEY;
