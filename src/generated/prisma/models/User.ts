@@ -192,6 +192,8 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   workoutTemplates?: Prisma.WorkoutTemplateListRelationFilter
   workoutSessions?: Prisma.WorkoutSessionListRelationFilter
+  aiSettings?: Prisma.XOR<Prisma.AiSettingsNullableScalarRelationFilter, Prisma.AiSettingsWhereInput> | null
+  chatConversations?: Prisma.ChatConversationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -203,6 +205,8 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   workoutTemplates?: Prisma.WorkoutTemplateOrderByRelationAggregateInput
   workoutSessions?: Prisma.WorkoutSessionOrderByRelationAggregateInput
+  aiSettings?: Prisma.AiSettingsOrderByWithRelationInput
+  chatConversations?: Prisma.ChatConversationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -217,6 +221,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   workoutTemplates?: Prisma.WorkoutTemplateListRelationFilter
   workoutSessions?: Prisma.WorkoutSessionListRelationFilter
+  aiSettings?: Prisma.XOR<Prisma.AiSettingsNullableScalarRelationFilter, Prisma.AiSettingsWhereInput> | null
+  chatConversations?: Prisma.ChatConversationListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -252,6 +258,8 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   workoutTemplates?: Prisma.WorkoutTemplateCreateNestedManyWithoutUserInput
   workoutSessions?: Prisma.WorkoutSessionCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsCreateNestedOneWithoutUserInput
+  chatConversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -263,6 +271,8 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   workoutTemplates?: Prisma.WorkoutTemplateUncheckedCreateNestedManyWithoutUserInput
   workoutSessions?: Prisma.WorkoutSessionUncheckedCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsUncheckedCreateNestedOneWithoutUserInput
+  chatConversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -274,6 +284,8 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workoutTemplates?: Prisma.WorkoutTemplateUpdateManyWithoutUserNestedInput
   workoutSessions?: Prisma.WorkoutSessionUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUpdateOneWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -285,6 +297,8 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workoutTemplates?: Prisma.WorkoutTemplateUncheckedUpdateManyWithoutUserNestedInput
   workoutSessions?: Prisma.WorkoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUncheckedUpdateOneWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -354,6 +368,34 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type UserCreateNestedOneWithoutAiSettingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAiSettingsInput, Prisma.UserUncheckedCreateWithoutAiSettingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiSettingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAiSettingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAiSettingsInput, Prisma.UserUncheckedCreateWithoutAiSettingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAiSettingsInput
+  upsert?: Prisma.UserUpsertWithoutAiSettingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAiSettingsInput, Prisma.UserUpdateWithoutAiSettingsInput>, Prisma.UserUncheckedUpdateWithoutAiSettingsInput>
+}
+
+export type UserCreateNestedOneWithoutChatConversationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatConversationsInput, Prisma.UserUncheckedCreateWithoutChatConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutChatConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatConversationsInput, Prisma.UserUncheckedCreateWithoutChatConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatConversationsInput
+  upsert?: Prisma.UserUpsertWithoutChatConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChatConversationsInput, Prisma.UserUpdateWithoutChatConversationsInput>, Prisma.UserUncheckedUpdateWithoutChatConversationsInput>
+}
+
 export type UserCreateNestedOneWithoutWorkoutTemplatesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutWorkoutTemplatesInput, Prisma.UserUncheckedCreateWithoutWorkoutTemplatesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkoutTemplatesInput
@@ -382,6 +424,134 @@ export type UserUpdateOneRequiredWithoutWorkoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkoutSessionsInput, Prisma.UserUpdateWithoutWorkoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutWorkoutSessionsInput>
 }
 
+export type UserCreateWithoutAiSettingsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  displayName: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionCreateNestedManyWithoutUserInput
+  chatConversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAiSettingsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  displayName: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateUncheckedCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedCreateNestedManyWithoutUserInput
+  chatConversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAiSettingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAiSettingsInput, Prisma.UserUncheckedCreateWithoutAiSettingsInput>
+}
+
+export type UserUpsertWithoutAiSettingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAiSettingsInput, Prisma.UserUncheckedUpdateWithoutAiSettingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAiSettingsInput, Prisma.UserUncheckedCreateWithoutAiSettingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAiSettingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAiSettingsInput, Prisma.UserUncheckedUpdateWithoutAiSettingsInput>
+}
+
+export type UserUpdateWithoutAiSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUpdateManyWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAiSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateUncheckedUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutChatConversationsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  displayName: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutChatConversationsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  displayName: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateUncheckedCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutChatConversationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatConversationsInput, Prisma.UserUncheckedCreateWithoutChatConversationsInput>
+}
+
+export type UserUpsertWithoutChatConversationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChatConversationsInput, Prisma.UserUncheckedUpdateWithoutChatConversationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatConversationsInput, Prisma.UserUncheckedCreateWithoutChatConversationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChatConversationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChatConversationsInput, Prisma.UserUncheckedUpdateWithoutChatConversationsInput>
+}
+
+export type UserUpdateWithoutChatConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChatConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workoutTemplates?: Prisma.WorkoutTemplateUncheckedUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUncheckedUpdateOneWithoutUserNestedInput
+}
+
 export type UserCreateWithoutWorkoutTemplatesInput = {
   id?: string
   email: string
@@ -390,6 +560,8 @@ export type UserCreateWithoutWorkoutTemplatesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workoutSessions?: Prisma.WorkoutSessionCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsCreateNestedOneWithoutUserInput
+  chatConversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkoutTemplatesInput = {
@@ -400,6 +572,8 @@ export type UserUncheckedCreateWithoutWorkoutTemplatesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workoutSessions?: Prisma.WorkoutSessionUncheckedCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsUncheckedCreateNestedOneWithoutUserInput
+  chatConversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkoutTemplatesInput = {
@@ -426,6 +600,8 @@ export type UserUpdateWithoutWorkoutTemplatesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workoutSessions?: Prisma.WorkoutSessionUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUpdateOneWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkoutTemplatesInput = {
@@ -436,6 +612,8 @@ export type UserUncheckedUpdateWithoutWorkoutTemplatesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workoutSessions?: Prisma.WorkoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUncheckedUpdateOneWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWorkoutSessionsInput = {
@@ -446,6 +624,8 @@ export type UserCreateWithoutWorkoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workoutTemplates?: Prisma.WorkoutTemplateCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsCreateNestedOneWithoutUserInput
+  chatConversations?: Prisma.ChatConversationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkoutSessionsInput = {
@@ -456,6 +636,8 @@ export type UserUncheckedCreateWithoutWorkoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workoutTemplates?: Prisma.WorkoutTemplateUncheckedCreateNestedManyWithoutUserInput
+  aiSettings?: Prisma.AiSettingsUncheckedCreateNestedOneWithoutUserInput
+  chatConversations?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkoutSessionsInput = {
@@ -482,6 +664,8 @@ export type UserUpdateWithoutWorkoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workoutTemplates?: Prisma.WorkoutTemplateUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUpdateOneWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkoutSessionsInput = {
@@ -492,6 +676,8 @@ export type UserUncheckedUpdateWithoutWorkoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workoutTemplates?: Prisma.WorkoutTemplateUncheckedUpdateManyWithoutUserNestedInput
+  aiSettings?: Prisma.AiSettingsUncheckedUpdateOneWithoutUserNestedInput
+  chatConversations?: Prisma.ChatConversationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -502,11 +688,13 @@ export type UserUncheckedUpdateWithoutWorkoutSessionsInput = {
 export type UserCountOutputType = {
   workoutTemplates: number
   workoutSessions: number
+  chatConversations: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workoutTemplates?: boolean | UserCountOutputTypeCountWorkoutTemplatesArgs
   workoutSessions?: boolean | UserCountOutputTypeCountWorkoutSessionsArgs
+  chatConversations?: boolean | UserCountOutputTypeCountChatConversationsArgs
 }
 
 /**
@@ -533,6 +721,13 @@ export type UserCountOutputTypeCountWorkoutSessionsArgs<ExtArgs extends runtime.
   where?: Prisma.WorkoutSessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountChatConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatConversationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -543,6 +738,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   workoutTemplates?: boolean | Prisma.User$workoutTemplatesArgs<ExtArgs>
   workoutSessions?: boolean | Prisma.User$workoutSessionsArgs<ExtArgs>
+  aiSettings?: boolean | Prisma.User$aiSettingsArgs<ExtArgs>
+  chatConversations?: boolean | Prisma.User$chatConversationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -577,6 +774,8 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workoutTemplates?: boolean | Prisma.User$workoutTemplatesArgs<ExtArgs>
   workoutSessions?: boolean | Prisma.User$workoutSessionsArgs<ExtArgs>
+  aiSettings?: boolean | Prisma.User$aiSettingsArgs<ExtArgs>
+  chatConversations?: boolean | Prisma.User$chatConversationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -587,6 +786,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     workoutTemplates: Prisma.$WorkoutTemplatePayload<ExtArgs>[]
     workoutSessions: Prisma.$WorkoutSessionPayload<ExtArgs>[]
+    aiSettings: Prisma.$AiSettingsPayload<ExtArgs> | null
+    chatConversations: Prisma.$ChatConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -991,6 +1192,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   workoutTemplates<T extends Prisma.User$workoutTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workoutTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkoutTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workoutSessions<T extends Prisma.User$workoutSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workoutSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkoutSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiSettings<T extends Prisma.User$aiSettingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiSettingsArgs<ExtArgs>>): Prisma.Prisma__AiSettingsClient<runtime.Types.Result.GetResult<Prisma.$AiSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  chatConversations<T extends Prisma.User$chatConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1464,6 +1667,49 @@ export type User$workoutSessionsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.WorkoutSessionScalarFieldEnum | Prisma.WorkoutSessionScalarFieldEnum[]
+}
+
+/**
+ * User.aiSettings
+ */
+export type User$aiSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiSettings
+   */
+  select?: Prisma.AiSettingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiSettings
+   */
+  omit?: Prisma.AiSettingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiSettingsInclude<ExtArgs> | null
+  where?: Prisma.AiSettingsWhereInput
+}
+
+/**
+ * User.chatConversations
+ */
+export type User$chatConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChatConversation
+   */
+  select?: Prisma.ChatConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChatConversation
+   */
+  omit?: Prisma.ChatConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatConversationInclude<ExtArgs> | null
+  where?: Prisma.ChatConversationWhereInput
+  orderBy?: Prisma.ChatConversationOrderByWithRelationInput | Prisma.ChatConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ChatConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatConversationScalarFieldEnum | Prisma.ChatConversationScalarFieldEnum[]
 }
 
 /**

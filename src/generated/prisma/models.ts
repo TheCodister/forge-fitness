@@ -9,6 +9,9 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/AiSettings'
+export type * from './models/ChatConversation'
+export type * from './models/ChatMessage'
 export type * from './models/Exercise'
 export type * from './models/WorkoutTemplate'
 export type * from './models/WorkoutTemplateExercise'

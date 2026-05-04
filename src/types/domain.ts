@@ -79,6 +79,27 @@ export type WorkoutSession = {
   exercises: WorkoutSessionExercise[];
 };
 
+export type AiSettings = {
+  provider: "openai" | "anthropic" | "google";
+  model: string;
+  maskedApiKey: string;
+} | null;
+
+export type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  createdAt: string | Date;
+};
+
+export type ChatConversation = {
+  id: string;
+  title: string | null;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  messages?: ChatMessage[];
+};
+
 export type SummaryReport = {
   completedSessions: number;
   upcomingSessions: number;

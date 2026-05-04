@@ -540,10 +540,6 @@ export type EnumMuscleGroupFieldUpdateOperationsInput = {
   set?: $Enums.MuscleGroup
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }

@@ -1,6 +1,7 @@
 import {
   Activity,
   BookOpen,
+  BotMessageSquare,
   CalendarClock,
   Dumbbell,
   LineChart,
@@ -18,6 +19,7 @@ const navigation = [
   { href: "/templates", label: "Templates", icon: Dumbbell },
   { href: "/exercises", label: "Exercises", icon: BookOpen },
   { href: "/reports", label: "Reports", icon: LineChart },
+  { href: "/trainer", label: "AI Trainer", icon: BotMessageSquare },
 ];
 
 export function AppShell({

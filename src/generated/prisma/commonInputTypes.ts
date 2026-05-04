@@ -72,18 +72,21 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
-export type EnumExerciseCategoryFilter<$PrismaModel = never> = {
-  equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel> | $Enums.ExerciseCategory
+export type EnumAiProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiProvider | Prisma.EnumAiProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiProviderFilter<$PrismaModel> | $Enums.AiProvider
 }
 
-export type EnumMuscleGroupFilter<$PrismaModel = never> = {
-  equals?: $Enums.MuscleGroup | Prisma.EnumMuscleGroupFieldRefInput<$PrismaModel>
-  in?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel> | $Enums.MuscleGroup
+export type EnumAiProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiProvider | Prisma.EnumAiProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiProviderWithAggregatesFilter<$PrismaModel> | $Enums.AiProvider
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiProviderFilter<$PrismaModel>
 }
 
 export type StringNullableFilter<$PrismaModel = never> = {
@@ -99,6 +102,43 @@ export type StringNullableFilter<$PrismaModel = never> = {
   endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
   mode?: Prisma.QueryMode
   not?: Prisma.NestedStringNullableFilter<$PrismaModel> | string | null
+}
+
+export type SortOrderInput = {
+  sort: Prisma.SortOrder
+  nulls?: Prisma.NullsOrder
+}
+
+export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  mode?: Prisma.QueryMode
+  not?: Prisma.NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedStringNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
+}
+
+export type EnumExerciseCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel> | $Enums.ExerciseCategory
+}
+
+export type EnumMuscleGroupFilter<$PrismaModel = never> = {
+  equals?: $Enums.MuscleGroup | Prisma.EnumMuscleGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel> | $Enums.MuscleGroup
 }
 
 export type BoolFilter<$PrismaModel = never> = {
@@ -130,11 +170,6 @@ export type JsonNullableFilterBase<$PrismaModel = never> = {
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
 }
 
-export type SortOrderInput = {
-  sort: Prisma.SortOrder
-  nulls?: Prisma.NullsOrder
-}
-
 export type EnumExerciseCategoryWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
   in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
@@ -153,24 +188,6 @@ export type EnumMuscleGroupWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel>
-}
-
-export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  mode?: Prisma.QueryMode
-  not?: Prisma.NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedStringNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
 }
 
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -425,18 +442,21 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
-export type NestedEnumExerciseCategoryFilter<$PrismaModel = never> = {
-  equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel> | $Enums.ExerciseCategory
+export type NestedEnumAiProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiProvider | Prisma.EnumAiProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiProviderFilter<$PrismaModel> | $Enums.AiProvider
 }
 
-export type NestedEnumMuscleGroupFilter<$PrismaModel = never> = {
-  equals?: $Enums.MuscleGroup | Prisma.EnumMuscleGroupFieldRefInput<$PrismaModel>
-  in?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel> | $Enums.MuscleGroup
+export type NestedEnumAiProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiProvider | Prisma.EnumAiProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiProvider[] | Prisma.ListEnumAiProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiProviderWithAggregatesFilter<$PrismaModel> | $Enums.AiProvider
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiProviderFilter<$PrismaModel>
 }
 
 export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -451,31 +471,6 @@ export type NestedStringNullableFilter<$PrismaModel = never> = {
   startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
   endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
   not?: Prisma.NestedStringNullableFilter<$PrismaModel> | string | null
-}
-
-export type NestedBoolFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
-export type NestedEnumExerciseCategoryWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
-  in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumExerciseCategoryWithAggregatesFilter<$PrismaModel> | $Enums.ExerciseCategory
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel>
-}
-
-export type NestedEnumMuscleGroupWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.MuscleGroup | Prisma.EnumMuscleGroupFieldRefInput<$PrismaModel>
-  in?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMuscleGroupWithAggregatesFilter<$PrismaModel> | $Enums.MuscleGroup
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel>
 }
 
 export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -504,6 +499,45 @@ export type NestedIntNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
   gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumExerciseCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel> | $Enums.ExerciseCategory
+}
+
+export type NestedEnumMuscleGroupFilter<$PrismaModel = never> = {
+  equals?: $Enums.MuscleGroup | Prisma.EnumMuscleGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel> | $Enums.MuscleGroup
+}
+
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type NestedEnumExerciseCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExerciseCategory | Prisma.EnumExerciseCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExerciseCategory[] | Prisma.ListEnumExerciseCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExerciseCategoryWithAggregatesFilter<$PrismaModel> | $Enums.ExerciseCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExerciseCategoryFilter<$PrismaModel>
+}
+
+export type NestedEnumMuscleGroupWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MuscleGroup | Prisma.EnumMuscleGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MuscleGroup[] | Prisma.ListEnumMuscleGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMuscleGroupWithAggregatesFilter<$PrismaModel> | $Enums.MuscleGroup
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMuscleGroupFilter<$PrismaModel>
 }
 
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {

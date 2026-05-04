@@ -41,3 +41,12 @@ export const WorkoutStatus = {
 } as const
 
 export type WorkoutStatus = (typeof WorkoutStatus)[keyof typeof WorkoutStatus]
+
+
+export const AiProvider = {
+  openai: 'openai',
+  anthropic: 'anthropic',
+  google: 'google'
+} as const
+
+export type AiProvider = (typeof AiProvider)[keyof typeof AiProvider]
