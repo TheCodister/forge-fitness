@@ -6,7 +6,6 @@ import { appendMessages, getConversation, updateConversationTitle } from "@/lib/
 import { runTrainerAgent } from "@/lib/server/ai-agent";
 import { chatMessageCreateSchema } from "@/lib/schemas/ai";
 
-type ToolCallChunk = { name?: string; id?: string; index?: number; args?: string };
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -30,7 +29,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     const encoder = new TextEncoder();
     let fullResponse = "";
-    const seenToolCallIds = new Set<string>();
+    const seenRunIds = new Set<string>();
 
     const readable = new ReadableStream({
       async start(controller) {
@@ -38,35 +37,30 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
 
         try {
-          for await (const item of agentStream) {
-            const [chunk, metadata] = item as unknown as [Record<string, unknown>, Record<string, unknown>];
-            const node = metadata?.langgraph_node as string | undefined;
+          for await (const event of agentStream) {
+            const { event: eventType, name, run_id } = event as {
+              event: string;
+              name: string;
+              run_id: string;
+              data: Record<string, unknown>;
+            };
+            const data = (event as { data: Record<string, unknown> }).data;
 
-            if (node === "agent") {
-              // AI text tokens
+            if (eventType === "on_chat_model_stream") {
+              const chunk = data?.chunk as { content?: string } | undefined;
               if (typeof chunk?.content === "string" && chunk.content) {
                 fullResponse += chunk.content;
                 emit({ type: "token", token: chunk.content });
               }
-
-              // Tool call intent — emit once per unique tool call ID when name is available
-              const toolCallChunks = chunk?.tool_call_chunks as ToolCallChunk[] | undefined;
-              if (toolCallChunks?.length) {
-                for (const tc of toolCallChunks) {
-                  if (tc.name && tc.id && !seenToolCallIds.has(tc.id)) {
-                    seenToolCallIds.add(tc.id);
-                    emit({ type: "tool_call", name: tc.name, id: tc.id });
-                  }
-                }
-              }
             }
 
-            if (node === "tools") {
-              // Tool execution result
-              if (typeof chunk?.content === "string" && chunk.content) {
-                const toolName = (chunk as Record<string, unknown>).name as string | undefined;
-                emit({ type: "tool_result", name: toolName ?? "tool", content: chunk.content });
-              }
+            if (eventType === "on_tool_start" && !seenRunIds.has(run_id)) {
+              seenRunIds.add(run_id);
+              emit({ type: "tool_call", name, id: run_id });
+            }
+
+            if (eventType === "on_tool_end") {
+              emit({ type: "tool_result", name, id: run_id });
             }
           }
 

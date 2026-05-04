@@ -19,7 +19,7 @@ export type DisplayMessage = TextMessage | ToolCallMessage;
 type SseEvent =
   | { type: "token"; token: string }
   | { type: "tool_call"; name: string; id: string }
-  | { type: "tool_result"; name: string; content: string }
+  | { type: "tool_result"; name: string; id: string }
   | { type: "done" }
   | { type: "error"; error: string };
 
@@ -113,12 +113,10 @@ export function useChat(conversationId: string, initialMessages: DisplayMessage[
             }
 
             if (event.type === "tool_result") {
-              // Mark matching pending tool card as done
+              // Mark matching pending tool card as done (match by run_id)
               setMessages((prev) =>
                 prev.map((m) =>
-                  m.role === "tool_call" &&
-                  (m as ToolCallMessage).toolName === event.name &&
-                  (m as ToolCallMessage).status === "pending"
+                  m.role === "tool_call" && (m as ToolCallMessage).toolCallId === event.id
                     ? ({ ...m, status: "done" } as ToolCallMessage)
                     : m,
                 ),

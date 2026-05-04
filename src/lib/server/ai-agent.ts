@@ -55,7 +55,5 @@ export async function runTrainerAgent({ userId, settings, history, userMessage }
     new HumanMessage(userMessage),
   ];
 
-  const stream = await agent.stream({ messages: langchainMessages }, { streamMode: "messages" });
-
-  return stream;
+  return agent.streamEvents({ messages: langchainMessages }, { version: "v2" });
 }

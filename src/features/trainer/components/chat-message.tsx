@@ -60,7 +60,7 @@ export function ChatMessage({ message }: { message: DisplayMessage }) {
         )}
         {message.content ? (
           isUser ? (
-            <div className="whitespace-pre-wrap break-words">{message.content}</div>
+            <div className="whitespace-pre-wrap wrap-break-word">{message.content}</div>
           ) : (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
