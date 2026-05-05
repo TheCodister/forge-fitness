@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { AlertCircle } from "lucide-react";
 import { useConversation } from "@/features/trainer/api/use-conversations";
-import { useChat, type DisplayMessage } from "@/features/trainer/api/use-chat";
+import { useChat } from "@/features/trainer/api/use-chat";
 import { ChatMessage } from "./chat-message";
 import { ChatInput } from "./chat-input";
 

@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/auth/auth-options";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  if (session?.user) redirect("/dashboard");
   return (
     <main className="relative min-h-svh overflow-hidden bg-[linear-gradient(150deg,_#040404_10%,_#0d0d0d_55%,_#1f1207_100%)] text-white">
       <div
