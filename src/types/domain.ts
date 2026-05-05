@@ -1,7 +1,8 @@
 export type AppUser = {
   id: string;
   email: string;
-  displayName: string;
+  name: string | null;
+  image: string | null;
   createdAt: string | Date;
 };
 

@@ -1,14 +1,10 @@
 import bcrypt from "bcryptjs";
+import { getServerSession } from "next-auth";
 
 import { prisma } from "@/lib/db/prisma";
 import { ApiError } from "@/lib/http";
-import { loginSchema, signupSchema } from "@/lib/schemas/auth";
-import {
-  clearSessionCookie,
-  getSessionFromCookies,
-  setSessionCookie,
-  signSessionToken,
-} from "@/lib/auth/session";
+import { signupSchema } from "@/lib/schemas/auth";
+import { authOptions } from "@/lib/auth/auth-options";
 
 export async function signupUser(input: unknown) {
   const parsed = signupSchema.parse(input);
@@ -26,79 +22,35 @@ export async function signupUser(input: unknown) {
 
   const user = await prisma.user.create({
     data: {
-      displayName: parsed.displayName,
+      name: parsed.name,
       email: parsed.email,
       passwordHash,
     },
     select: {
       id: true,
       email: true,
-      displayName: true,
+      name: true,
       createdAt: true,
     },
   });
 
-  const token = await signSessionToken({
-    userId: user.id,
-    email: user.email,
-    displayName: user.displayName,
-  });
-
-  await setSessionCookie(token);
-
   return user;
 }
 
-export async function loginUser(input: unknown) {
-  const parsed = loginSchema.parse(input);
-
-  const user = await prisma.user.findUnique({
-    where: { email: parsed.email },
-  });
-
-  if (!user) {
-    throw new ApiError(401, "INVALID_CREDENTIALS", "Invalid email or password.");
-  }
-
-  const passwordMatches = await bcrypt.compare(parsed.password, user.passwordHash);
-
-  if (!passwordMatches) {
-    throw new ApiError(401, "INVALID_CREDENTIALS", "Invalid email or password.");
-  }
-
-  const token = await signSessionToken({
-    userId: user.id,
-    email: user.email,
-    displayName: user.displayName,
-  });
-
-  await setSessionCookie(token);
-
-  return {
-    id: user.id,
-    email: user.email,
-    displayName: user.displayName,
-    createdAt: user.createdAt,
-  };
-}
-
-export async function logoutUser() {
-  await clearSessionCookie();
-}
-
 export async function getCurrentUser() {
-  const session = await getSessionFromCookies();
+  const session = await getServerSession(authOptions);
 
-  if (!session) {
+  if (!session?.user?.id) {
     return null;
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: session.userId },
+    where: { id: session.user.id },
     select: {
       id: true,
       email: true,
-      displayName: true,
+      name: true,
+      image: true,
       createdAt: true,
     },
   });

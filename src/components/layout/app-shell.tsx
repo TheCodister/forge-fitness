@@ -54,7 +54,7 @@ export function AppShell({
             })}
           </nav>
           <div className="mt-auto rounded-2xl border border-white/10 bg-white/4 p-4">
-            <div className="text-sm font-medium">{user.displayName}</div>
+            <div className="text-sm font-medium">{user.name ?? user.email}</div>
             <div className="mt-1 text-xs text-zinc-400">{user.email}</div>
             <div className="mt-4">
               <LogoutButton />

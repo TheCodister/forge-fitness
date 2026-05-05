@@ -15,13 +15,19 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const { data: conversation, isLoading } = useConversation(conversationId);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const initialMessages: DisplayMessage[] =
-    conversation?.messages.map((m) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    })) ?? [];
+  const { messages, setMessages, isStreaming, error, sendMessage } = useChat(conversationId, []);
 
-  const { messages, isStreaming, error, sendMessage } = useChat(conversationId, initialMessages);
+  useEffect(() => {
+    if (conversation?.messages) {
+      setMessages(
+        conversation.messages.map((m) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content,
+        })),
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversation?.id]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -17,7 +17,8 @@ describe("GET /api/reports/summary", () => {
     vi.mocked(requireUser).mockResolvedValueOnce({
       id: "user_1",
       email: "athlete@example.com",
-      displayName: "Athlete",
+      name: "Athlete",
+      image: null,
       createdAt: new Date("2026-04-26T00:00:00.000Z"),
     });
     vi.mocked(getSummaryReport).mockResolvedValueOnce({

@@ -371,10 +371,6 @@ export type ChatConversationUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.ChatConversationScalarWhereInput | Prisma.ChatConversationScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ChatConversationCreateNestedOneWithoutMessagesInput = {
   create?: Prisma.XOR<Prisma.ChatConversationCreateWithoutMessagesInput, Prisma.ChatConversationUncheckedCreateWithoutMessagesInput>
   connectOrCreate?: Prisma.ChatConversationCreateOrConnectWithoutMessagesInput

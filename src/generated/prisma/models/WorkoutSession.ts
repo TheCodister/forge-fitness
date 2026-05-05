@@ -551,10 +551,6 @@ export type EnumWorkoutStatusFieldUpdateOperationsInput = {
   set?: $Enums.WorkoutStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type WorkoutSessionCreateNestedOneWithoutExercisesInput = {
   create?: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutExercisesInput, Prisma.WorkoutSessionUncheckedCreateWithoutExercisesInput>
   connectOrCreate?: Prisma.WorkoutSessionCreateOrConnectWithoutExercisesInput
