@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { ChatWindow } from "@/features/trainer/components/chat-window";
 import { ConversationList } from "@/features/trainer/components/conversation-list";
+import { NewChatWindow } from "@/features/trainer/components/new-chat-window";
 import { MobileSidebar } from "@/features/trainer/components/mobile-sidebar";
 
-interface Props {
-  params: Promise<{ conversationId: string }>;
-}
-
-export default async function ConversationPage({ params }: Props) {
-  const { conversationId } = await params;
-
+export default function NewChatPage() {
   return (
     <div className="flex gap-6" style={{ minHeight: "calc(100vh - 140px)" }}>
       <aside className="hidden w-64 shrink-0 lg:block">
@@ -23,7 +17,7 @@ export default async function ConversationPage({ params }: Props) {
             All chats
           </Link>
         </div>
-        <ConversationList activeId={conversationId} />
+        <ConversationList />
       </aside>
 
       <div className="flex-1 flex flex-col">
@@ -35,9 +29,9 @@ export default async function ConversationPage({ params }: Props) {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <MobileSidebar activeId={conversationId} />
+          <MobileSidebar />
         </div>
-        <ChatWindow conversationId={conversationId} />
+        <NewChatWindow />
       </div>
     </div>
   );

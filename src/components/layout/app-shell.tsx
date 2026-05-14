@@ -10,6 +10,7 @@ import Link from "next/link";
 
 import { LogoutButton } from "@/components/layout/logout-button";
 import { AppNavLink } from "@/components/layout/nav-link";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { APP_NAME } from "@/lib/constants";
 import type { AppUser } from "@/types/domain";
 
@@ -80,7 +81,7 @@ export function AppShell({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/github.svg" alt="" aria-hidden className="h-4 w-4" />
               </Link>
-              <LogoutButton />
+              <MobileNav user={user} />
             </div>
           </div>
           <main className="rounded-3xl border border-white/10 bg-black/45 p-5 md:p-8">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type TextMessage = {
   role: "user" | "assistant";
@@ -27,6 +28,7 @@ export function useChat(conversationId: string, initialMessages: DisplayMessage[
   const [messages, setMessages] = useState<DisplayMessage[]>(initialMessages);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -80,6 +82,10 @@ export function useChat(conversationId: string, initialMessages: DisplayMessage[
             }
 
             if (event.type === "error") throw new Error(event.error);
+
+            if (event.type === "done") {
+              void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+            }
 
             if (event.type === "token") {
               // Append to the last assistant message
@@ -140,7 +146,7 @@ export function useChat(conversationId: string, initialMessages: DisplayMessage[
         setIsStreaming(false);
       }
     },
-    [conversationId, isStreaming],
+    [conversationId, isStreaming, queryClient],
   );
 
   return { messages, setMessages, isStreaming, error, sendMessage };

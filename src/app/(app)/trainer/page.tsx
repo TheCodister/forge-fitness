@@ -10,8 +10,8 @@ export default async function TrainerPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
           <h1 className="text-2xl font-semibold">AI Personal Trainer</h1>
           <p className="mt-1 text-sm text-zinc-400">
             Your AI-powered fitness coach — ask anything about workouts, goals, or nutrition.
@@ -19,7 +19,7 @@ export default async function TrainerPage() {
         </div>
         <Link
           href="/trainer/settings"
-          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/10"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/10"
         >
           <Settings className="h-4 w-4" />
           AI Settings

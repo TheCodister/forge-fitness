@@ -4,21 +4,15 @@ import { useRouter } from "next/navigation";
 import { MessageSquarePlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useConversations, useCreateConversation, useDeleteConversation } from "@/features/trainer/api/use-conversations";
+import { useConversations, useDeleteConversation } from "@/features/trainer/api/use-conversations";
 
 export function ConversationList({ activeId }: { activeId?: string }) {
   const { data: conversations, isLoading } = useConversations();
-  const createConversation = useCreateConversation();
   const deleteConversation = useDeleteConversation();
   const router = useRouter();
 
-  async function handleNew() {
-    try {
-      const conversation = await createConversation.mutateAsync();
-      router.push(`/trainer/${conversation.id}`);
-    } catch {
-      toast.error("Failed to create conversation.");
-    }
+  function handleNew() {
+    router.push("/trainer/new");
   }
 
   async function handleDelete(id: string, e: React.MouseEvent) {
@@ -36,7 +30,6 @@ export function ConversationList({ activeId }: { activeId?: string }) {
     <div className="space-y-3">
       <Button
         onClick={handleNew}
-        disabled={createConversation.isPending}
         className="w-full bg-orange-500 text-white hover:bg-orange-600 gap-2"
       >
         <MessageSquarePlus className="h-4 w-4" />

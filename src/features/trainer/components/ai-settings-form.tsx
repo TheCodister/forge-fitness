@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -50,13 +51,23 @@ export function AiSettingsForm() {
   const { data: settings } = useAiSettings();
   const upsert = useUpsertAiSettings();
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       provider: settings?.provider ?? "openai",
       model: settings?.model ?? MODELS.openai[0].id,
       apiKey: "",
     },
   });
+
+  useEffect(() => {
+    if (settings) {
+      reset({
+        provider: settings.provider as FormValues["provider"],
+        model: settings.model,
+        apiKey: "",
+      });
+    }
+  }, [settings, reset]);
 
   const provider = watch("provider");
   const model = watch("model");

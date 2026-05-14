@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/server/auth";
 import { getDecryptedAiSettings } from "@/lib/server/ai-settings";
 import { appendMessages, getConversation, updateConversationTitle } from "@/lib/server/chat";
 import { runTrainerAgent } from "@/lib/server/ai-agent";
+import { generateConversationTitle } from "@/lib/server/ai-title";
 import { chatMessageCreateSchema } from "@/lib/schemas/ai";
 
 
@@ -67,7 +68,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
           await appendMessages(conversationId, [{ role: "assistant", content: fullResponse }]);
 
           if (!conversation.title && content) {
-            await updateConversationTitle(conversationId, content.slice(0, 60));
+            const title = await generateConversationTitle(content);
+            await updateConversationTitle(conversationId, title);
+            console.log(`Updated conversation ${conversationId} title to: ${title}`);
           }
 
           emit({ type: "done" });

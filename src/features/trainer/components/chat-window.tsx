@@ -30,6 +30,17 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   }, [conversation?.id]);
 
   useEffect(() => {
+    if (!conversation) return;
+    const key = `pending_${conversationId}`;
+    const pending = sessionStorage.getItem(key);
+    if (pending) {
+      sessionStorage.removeItem(key);
+      void sendMessage(pending);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversation?.id]);
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
