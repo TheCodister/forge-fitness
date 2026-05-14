@@ -19,6 +19,16 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: APP_NAME,
   description: APP_DESCRIPTION,
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon-preview.png",
+  },
+  openGraph: {
+    title: APP_NAME,
+    description: APP_DESCRIPTION,
+    images: [{ url: "/favicon-preview.png" }],
+  },
 };
 
 export default function RootLayout({
