@@ -3,6 +3,7 @@ import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-black text-white">
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
