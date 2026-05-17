@@ -164,3 +164,53 @@
     animation: none;
   }
 }
+
+/* Trainer chat: typing dots animation */
+@keyframes ff-typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); background: #FF5A1F; }
+}
+
+/* Spinner for tool-call cards */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Trainer page utility classes */
+.trainer-back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #8A8B92; text-decoration: none;
+  transition: color 0.15s;
+}
+.trainer-back-link:hover { color: #FAFAFA; }
+
+.trainer-icon-btn {
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: #111113;
+  color: #8A8B92; text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.trainer-icon-btn:hover { border-color: rgba(255,255,255,0.25); color: #FAFAFA; }
+
+.trainer-inline-link {
+  color: #FF5A1F; text-decoration: underline; text-underline-offset: 2px;
+}
+.trainer-inline-link:hover { color: #FF7A3D; }
+
+.trainer-cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 22px;
+  background: #FF5A1F; color: #0A0604;
+  border-radius: 4px;
+  font-weight: 700; font-size: 13px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.trainer-cta-btn:hover { background: #FF7A3D; }

@@ -6,27 +6,50 @@ import { MobileSidebar } from "@/features/trainer/components/mobile-sidebar";
 
 export default function NewChatPage() {
   return (
-    <div className="flex gap-6" style={{ minHeight: "calc(100vh - 140px)" }}>
-      <aside className="hidden w-64 shrink-0 lg:block">
-        <div className="mb-4 flex items-center gap-2">
-          <Link
-            href="/trainer"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-400 transition hover:text-zinc-200"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            All chats
+    <div
+      style={{
+        display: "flex",
+        gap: 0,
+        height: "calc(100vh - 110px)",
+        margin: "-28px -32px",
+        overflow: "hidden",
+      }}
+    >
+      <aside
+        className="hidden lg:flex lg:flex-col"
+        style={{
+          width: 248,
+          flexShrink: 0,
+          borderRight: "1px solid rgba(255,255,255,0.07)",
+          background: "#080809",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{
+          padding: "16px 16px 14px",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}>
+          <Link href="/trainer" className="trainer-back-link">
+            <ArrowLeft style={{ width: 12, height: 12 }} />
+            Sessions
           </Link>
         </div>
-        <ConversationList />
+        <div style={{ flex: 1, overflow: "hidden", padding: "12px 12px", display: "flex", flexDirection: "column" }}>
+          <ConversationList />
+        </div>
       </aside>
 
-      <div className="flex-1 flex flex-col">
+      <div
+        style={{
+          flex: 1, minWidth: 0,
+          display: "flex", flexDirection: "column",
+          padding: "20px 28px",
+          overflow: "hidden",
+        }}
+      >
         <div className="mb-4 flex items-center justify-between lg:hidden">
-          <Link
-            href="/trainer"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-400 transition hover:text-zinc-200"
-          >
-            <ArrowLeft className="h-4 w-4" />
+          <Link href="/trainer" className="trainer-back-link">
+            <ArrowLeft style={{ width: 14, height: 14 }} />
             Back
           </Link>
           <MobileSidebar />
