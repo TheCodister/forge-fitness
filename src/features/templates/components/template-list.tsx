@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -8,13 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDeleteTemplate, useTemplates } from "@/features/templates/api/use-templates";
+import { TemplateExercisesDialog } from "@/features/templates/components/template-exercises-dialog";
 import { cn } from "@/lib/utils";
+import type { WorkoutTemplate } from "@/types/domain";
 
 export function TemplateList() {
   const { data: templates } = useTemplates();
   const deleteTemplate = useDeleteTemplate();
+  const [browsing, setBrowsing] = useState<WorkoutTemplate | null>(null);
 
   return (
+    <>
     <div className="space-y-8">
       <PageHeader
         title="Workout Templates"
@@ -64,6 +69,14 @@ export function TemplateList() {
                   type="button"
                   variant="outline"
                   className="border-white/10 bg-transparent text-white hover:bg-white/5"
+                  onClick={() => setBrowsing(template as unknown as WorkoutTemplate)}
+                >
+                  View exercises
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-white/10 bg-transparent text-white hover:bg-white/5"
                   onClick={async () => {
                     await deleteTemplate.mutateAsync(template.id);
                     toast.success("Template deleted.");
@@ -77,5 +90,14 @@ export function TemplateList() {
         ))}
       </div>
     </div>
+
+      {browsing && (
+        <TemplateExercisesDialog
+          template={browsing}
+          open={!!browsing}
+          onOpenChange={(open) => { if (!open) setBrowsing(null); }}
+        />
+      )}
+    </>
   );
 }
