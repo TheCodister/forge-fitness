@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -17,6 +19,12 @@ jobs:
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
+
+    env:
+      # prisma.config.ts resolves env("DATABASE_URL") eagerly, so `prisma generate`
+      # fails without it. Nothing here connects: the unit tests mock the client.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/unused
+
     steps:
       - uses: actions/checkout@v4
 
