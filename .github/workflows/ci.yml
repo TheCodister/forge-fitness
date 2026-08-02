@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -17,6 +19,12 @@ jobs:
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
+
+    env:
+      # prisma.config.ts resolves env("DATABASE_URL") eagerly, so `prisma generate`
+      # fails without it. Nothing here connects: the unit tests mock the client.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/unused
+
     steps:
       - uses: actions/checkout@v4
 
@@ -62,8 +70,9 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/forge_test
       NEXTAUTH_URL: http://127.0.0.1:3000
       NEXTAUTH_SECRET: ci-nextauth-secret-not-for-production
-      # ai-crypto requires exactly 32 bytes of hex.
-      ENCRYPTION_SECRET: 0000000000000000000000000000000000000000000000000000000000000000
+      # ai-crypto requires exactly 32 bytes of hex. Quoted: YAML would otherwise
+      # read an unquoted run of digits as the number 0.
+      ENCRYPTION_SECRET: "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff"
       # NextAuth builds the Google provider eagerly; placeholders keep it from throwing.
       GOOGLE_CLIENT_ID: ci-google-client-id
       GOOGLE_CLIENT_SECRET: ci-google-client-secret
@@ -90,7 +99,8 @@ jobs:
         run: pnpm exec prisma generate
 
       - name: Push schema to the test database
-        run: pnpm exec prisma db push --skip-generate
+        # Prisma 7 dropped --skip-generate from `db push`.
+        run: pnpm exec prisma db push
 
       - name: Seed exercise catalog
         run: pnpm db:seed
