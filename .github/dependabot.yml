@@ -13,6 +13,12 @@ updates:
       prefix: "chore"
       prefix-development: "chore"
       include: scope
+    # Let a release sit for a month before proposing it. A compromised or
+    # broken publish is usually yanked or patched well inside that window,
+    # so waiting does the vetting that we would otherwise do by hand.
+    # Security updates ignore cooldown, so CVE fixes still arrive immediately.
+    cooldown:
+      default-days: 30
     groups:
       # Minor and patch bumps are the routine ones: batch them so they arrive
       # as two reviewable PRs a week instead of a dozen.
@@ -47,6 +53,8 @@ updates:
     commit-message:
       prefix: "ci"
       include: scope
+    cooldown:
+      default-days: 30
     groups:
       actions:
         patterns: ["*"]
