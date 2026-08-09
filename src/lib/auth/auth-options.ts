@@ -6,6 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { prisma } from "@/lib/db/prisma";
 import { loginSchema } from "@/lib/schemas/auth";
+import { assertRateLimit, getClientIpFromHeaders } from "@/lib/server/rate-limit";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -21,9 +22,24 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
+        const clientIp = getClientIpFromHeaders(request.headers);
+        if (clientIp !== "unknown") {
+          assertRateLimit(`auth:login:ip:${clientIp}`, {
+            maxRequests: 20,
+            windowMs: 10 * 60 * 1000,
+            message: "Too many login attempts. Please try again shortly.",
+          });
+        }
+
         const parsed = loginSchema.safeParse(credentials);
         if (!parsed.success) return null;
+
+        assertRateLimit(`auth:login:email:${parsed.data.email}`, {
+          maxRequests: 10,
+          windowMs: 10 * 60 * 1000,
+          message: "Too many login attempts. Please try again shortly.",
+        });
 
         const user = await prisma.user.findUnique({
           where: { email: parsed.data.email },

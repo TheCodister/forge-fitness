@@ -6,11 +6,19 @@ import { appendMessages, getConversation, updateConversationTitle } from "@/lib/
 import { runTrainerAgent } from "@/lib/server/ai-agent";
 import { generateConversationTitle } from "@/lib/server/ai-title";
 import { chatMessageCreateSchema } from "@/lib/schemas/ai";
+import { assertRateLimit, getClientIp } from "@/lib/server/rate-limit";
 
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await requireUser();
+    const clientIp = getClientIp(request);
+    assertRateLimit(`ai:messages:${user.id}:${clientIp}`, {
+      maxRequests: 30,
+      windowMs: 10 * 60 * 1000,
+      message: "Too many AI requests. Please try again shortly.",
+    });
+
     const { id: conversationId } = await params;
     const body = await parseJsonBody(request, 8 * 1024);
     const { content } = chatMessageCreateSchema.parse(body);

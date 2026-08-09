@@ -7,6 +7,7 @@ export class ApiError extends Error {
     public code: string,
     message: string,
     public fieldErrors?: Record<string, string[] | undefined>,
+    public headers?: HeadersInit,
   ) {
     super(message);
   }
@@ -65,7 +66,7 @@ export function handleRouteError(error: unknown) {
         code: error.code,
         fieldErrors: error.fieldErrors,
       },
-      { status: error.status },
+      { status: error.status, headers: error.headers },
     );
   }
 

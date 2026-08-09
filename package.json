@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "db:seed": "node prisma/seed.mjs",
-    "db:seed:test-user": "node prisma/seed-test-user.mjs"
+    "db:seed:test-user": "node prisma/seed-test-user.mjs",
+    "db:migrate-exercise-images": "node prisma/migrate-exercise-images.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
