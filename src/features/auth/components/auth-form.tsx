@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -12,7 +11,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { apiFetch, ClientApiError } from "@/lib/api/fetcher";
+import { apiFetch, apiUrl, ClientApiError } from "@/lib/api/fetcher";
 
 const authFormSchema = z.object({
   name: z.string().trim().optional(),
@@ -50,21 +49,15 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         });
       }
 
-      const result = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
+      await apiFetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email: values.email, password: values.password }),
       });
-
-      if (result?.error) {
-        throw new Error("Invalid email or password.");
-      }
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       toast.success(mode === "signup" ? "Account created." : "Welcome back.");
       router.replace("/dashboard");
-      router.refresh();
     },
     onError: (error) => {
       if (error instanceof ClientApiError) {
@@ -101,7 +94,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           type="button"
           variant="outline"
           className="w-full border-white/10 bg-white/5 text-white hover:bg-white/10 mb-4"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          onClick={() => { window.location.href = apiUrl("/api/auth/google"); }}
         >
           <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path

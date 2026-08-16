@@ -58,7 +58,7 @@ export function TemplateList() {
               </div>
               <div className="flex gap-3">
                 <Link
-                  href={`/templates/${template.id}`}
+                  href={`/templates/edit?id=${encodeURIComponent(template.id)}`}
                   className={cn(
                     buttonVariants({ className: "bg-orange-500 text-black hover:bg-orange-400" }),
                   )}

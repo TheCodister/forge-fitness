@@ -27,16 +27,16 @@ test.describe("login", () => {
 
     await submit.click();
 
-    // next-auth signs in over fetch, then the client router replaces the URL.
-    await page.waitForURL("**/dashboard", { timeout: 30_000 });
+    // Fastify signs in over fetch, then the client router replaces the URL.
+    await page.waitForURL("**/dashboard**", { timeout: 30_000 });
     await page.waitForLoadState("networkidle");
 
     const heading = page.getByRole("heading", { level: 1, name: "Dashboard" });
     await expect(heading).toBeVisible({ timeout: 20_000 });
     await expect(heading).toHaveText("Dashboard");
 
-    // The signed-in shell is server-rendered behind the session check.
-    await expect(page).toHaveURL(/\/dashboard$/);
+    // The signed-in shell renders after the client session check.
+    await expect(page).toHaveURL(/\/dashboard\/?$/);
   });
 
   test("rejects an invalid password and stays on the login page", async ({ page }) => {
@@ -48,7 +48,7 @@ test.describe("login", () => {
     await page.getByRole("button", { name: "Log in" }).click();
 
     await expect(page.getByText("Invalid email or password.")).toBeVisible({ timeout: 20_000 });
-    await expect(page).toHaveURL(/\/login$/);
+    await expect(page).toHaveURL(/\/login\/?$/);
   });
 
   test("redirects an anonymous visitor away from the dashboard", async ({ page }) => {

@@ -1,0 +1,33 @@
+{
+  "family": "forge-fitness-migration",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/forge-fitness-ecs-execution",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "containerDefinitions": [
+    {
+      "name": "forge-fitness-migration",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/forge-fitness-api:MIGRATION_TAG",
+      "essential": true,
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:forge-fitness/database-url"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/forge-fitness-api",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "migration"
+        }
+      }
+    }
+  ]
+}

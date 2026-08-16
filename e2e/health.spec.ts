@@ -13,9 +13,12 @@ const AUTHENTICATED_ROUTES = [
   "/api/ai/conversations",
 ];
 
+const apiUrl = process.env.E2E_API_URL ?? "http://127.0.0.1:4000";
+const apiPath = (path: string) => `${apiUrl}${path}`;
+
 test.describe("api health", () => {
   test("health endpoint reports every dependency as up", async ({ request, baseURL }) => {
-    const response = await request.get("/api/health", { timeout: 30_000 });
+    const response = await request.get(apiPath("/api/health"), { timeout: 30_000 });
 
     expect(response.status(), `GET ${baseURL}/api/health`).toBe(200);
 
@@ -30,14 +33,14 @@ test.describe("api health", () => {
 
   for (const route of PUBLIC_ROUTES) {
     test(`public route ${route} responds 200`, async ({ request }) => {
-      const response = await request.get(route, { timeout: 30_000 });
+      const response = await request.get(apiPath(route), { timeout: 30_000 });
       expect(response.status(), `GET ${route}`).toBe(200);
     });
   }
 
   for (const route of AUTHENTICATED_ROUTES) {
     test(`authenticated route ${route} responds 200 with a session`, async ({ request }) => {
-      const response = await request.get(route, { timeout: 30_000 });
+      const response = await request.get(apiPath(route), { timeout: 30_000 });
       expect(response.status(), `GET ${route} (signed in)`).toBe(200);
     });
   }
@@ -49,7 +52,7 @@ test.describe("api health (signed out)", () => {
 
   test("authenticated routes reject anonymous callers", async ({ request }) => {
     for (const route of AUTHENTICATED_ROUTES) {
-      const response = await request.get(route, { timeout: 30_000 });
+      const response = await request.get(apiPath(route), { timeout: 30_000 });
       expect(response.status(), `GET ${route} (anonymous)`).toBe(401);
     }
   });

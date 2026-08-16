@@ -16,7 +16,7 @@ setup("authenticate", async ({ page }) => {
   await page.getByLabel("Password").fill(testUser.password);
   await page.getByRole("button", { name: "Log in" }).click();
 
-  await page.waitForURL("**/dashboard", { timeout: 30_000 });
+  await page.waitForURL("**/dashboard**", { timeout: 30_000 });
   await expect(page.getByRole("heading", { level: 1, name: "Dashboard" })).toBeVisible();
 
   await page.context().storageState({ path: storageStatePath });

@@ -78,7 +78,7 @@ export function DashboardOverview() {
               sessions.slice(0, 5).map((session) => (
                 <Link
                   key={session.id}
-                  href={`/workouts/${session.id}`}
+                  href={`/workouts/edit?id=${encodeURIComponent(session.id)}`}
                   className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:border-orange-400/30 hover:bg-orange-500/10"
                 >
                   <div>

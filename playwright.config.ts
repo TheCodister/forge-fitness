@@ -42,13 +42,23 @@ export default defineConfig({
     },
   ],
   webServer: shouldStartServer
-    ? {
-        command: "pnpm exec next start --port 3000",
-        url: `${baseURL}/api/health`,
-        reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
-        stdout: "pipe",
-        stderr: "pipe",
-      }
+    ? [
+        {
+          command: "pnpm dev:frontend",
+          url: baseURL,
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+          stdout: "pipe",
+          stderr: "pipe",
+        },
+        {
+          command: "pnpm dev:backend",
+          url: `${process.env.E2E_API_URL ?? "http://127.0.0.1:4000"}/api/health`,
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+          stdout: "pipe",
+          stderr: "pipe",
+        },
+      ]
     : undefined,
 });

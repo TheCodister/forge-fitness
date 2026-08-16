@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 export class ApiError extends Error {
@@ -14,11 +13,11 @@ export class ApiError extends Error {
 }
 
 export function jsonOk<T>(data: T, init?: ResponseInit) {
-  return NextResponse.json(data, init);
+  return Response.json(data, init);
 }
 
 export function noContent() {
-  return new NextResponse(null, { status: 204 });
+  return new Response(null, { status: 204 });
 }
 
 export async function parseJsonBody<T>(request: Request, maxBytes = 16 * 1024): Promise<T> {
@@ -49,7 +48,7 @@ export async function parseJsonBody<T>(request: Request, maxBytes = 16 * 1024): 
 
 export function handleRouteError(error: unknown) {
   if (error instanceof ZodError) {
-    return NextResponse.json(
+    return Response.json(
       {
         message: "Validation failed.",
         code: "VALIDATION_ERROR",
@@ -60,7 +59,7 @@ export function handleRouteError(error: unknown) {
   }
 
   if (error instanceof ApiError) {
-    return NextResponse.json(
+    return Response.json(
       {
         message: error.message,
         code: error.code,
@@ -72,7 +71,7 @@ export function handleRouteError(error: unknown) {
 
   console.error(error);
 
-  return NextResponse.json(
+  return Response.json(
     {
       message: "Unexpected server error.",
       code: "INTERNAL_SERVER_ERROR",

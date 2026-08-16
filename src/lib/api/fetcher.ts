@@ -13,11 +13,17 @@ export class ClientApiError extends Error {
   }
 }
 
+export function apiUrl(path: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:4000";
+  return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
 export async function apiFetch<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const response = await fetch(input, {
+  const target = typeof input === "string" && input.startsWith("/") ? apiUrl(input) : input;
+  const response = await fetch(target, {
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      ...(init?.body ? { "Content-Type": "application/json" } : {}),
       ...(init?.headers ?? {}),
     },
     ...init,

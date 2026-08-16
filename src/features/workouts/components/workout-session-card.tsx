@@ -36,7 +36,7 @@ export function WorkoutSessionCard({ session }: WorkoutSessionCardProps) {
         </p>
         <div className="flex gap-3">
           <Link
-            href={`/workouts/${session.id}`}
+            href={`/workouts/edit?id=${encodeURIComponent(session.id)}`}
             className={cn(
               buttonVariants({
                 className: "bg-orange-500 text-black hover:bg-orange-400",

@@ -196,12 +196,13 @@ forge-fitness/
    ```
 
 2. **Set up environment variables**
-   Create `.env.local`:
+   Copy `.env.example` to `.env` and configure both processes:
 
    ```
+   NEXT_PUBLIC_API_URL=http://localhost:4000
+   FRONTEND_URL=http://localhost:3000
    DATABASE_URL=postgresql://user:password@localhost:5432/forge_fitness
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
+   JWT_SECRET=replace-with-at-least-32-random-characters
    ```
 
 3. **Set up the database**
@@ -221,9 +222,12 @@ forge-fitness/
 ## 📝 Available Scripts
 
 ```bash
-pnpm dev              # Start development server
-pnpm build            # Build for production
-pnpm start            # Start production server
+pnpm dev              # Start the frontend and Fastify backend
+pnpm dev:frontend     # Start only Next.js
+pnpm dev:backend      # Start only Fastify
+pnpm build:frontend   # Export the static frontend to out/
+pnpm build:backend    # Type-check backend production sources
+pnpm start:backend    # Start the Fastify production API
 pnpm lint             # Run ESLint
 pnpm test             # Run tests with Vitest
 pnpm test:watch       # Run tests in watch mode
@@ -290,7 +294,7 @@ pnpm test:watch
 
 - JWT-based authentication with jose
 - Password hashing with bcryptjs
-- Security headers configured in `next.config.ts`:
+- Security headers configured for Amplify in `customHttp.yml` and for the API with Fastify Helmet:
   - X-Frame-Options: DENY
   - X-Content-Type-Options: nosniff
   - Referrer-Policy: strict-origin-when-cross-origin
@@ -304,6 +308,7 @@ pnpm test:watch
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [shadcn/ui Components](https://ui.shadcn.com/)
 - [Zod Validation](https://zod.dev/)
+- [Separate frontend/backend deployment](docs/deployment.md)
 
 ## 📄 License
 

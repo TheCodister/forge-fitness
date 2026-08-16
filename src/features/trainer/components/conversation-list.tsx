@@ -129,8 +129,8 @@ export function ConversationList({ activeId }: { activeId?: string }) {
               key={conv.id}
               role="button"
               tabIndex={0}
-              onClick={() => router.push(`/trainer/${conv.id}`)}
-              onKeyDown={(e) => e.key === "Enter" && router.push(`/trainer/${conv.id}`)}
+              onClick={() => router.push(`/trainer/conversation?id=${encodeURIComponent(conv.id)}`)}
+              onKeyDown={(e) => e.key === "Enter" && router.push(`/trainer/conversation?id=${encodeURIComponent(conv.id)}`)}
               className="group"
               style={{
                 padding: "10px 10px",

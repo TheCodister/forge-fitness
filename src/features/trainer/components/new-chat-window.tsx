@@ -23,7 +23,7 @@ export function NewChatWindow() {
     try {
       const conversation = await apiFetch<Conversation>("/api/ai/conversations", { method: "POST" });
       sessionStorage.setItem(`pending_${conversation.id}`, content);
-      router.push(`/trainer/${conversation.id}`);
+      router.push(`/trainer/conversation?id=${encodeURIComponent(conversation.id)}`);
     } catch {
       setIsCreating(false);
     }

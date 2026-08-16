@@ -1,12 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Settings } from "lucide-react";
-import { requireUser } from "@/lib/server/auth";
-import { getAiSettings } from "@/lib/server/ai-settings";
 import { ConversationList } from "@/features/trainer/components/conversation-list";
+import { useAiSettings } from "@/features/trainer/api/use-ai-settings";
 
-export default async function TrainerPage() {
-  const user = await requireUser();
-  const settings = await getAiSettings(user.id);
+export default function TrainerPage() {
+  const { data: settings, isLoading } = useAiSettings();
 
   return (
     <div
@@ -73,7 +73,7 @@ export default async function TrainerPage() {
           textAlign: "center",
         }}
       >
-        {!settings && (
+        {!isLoading && !settings && (
           <div style={{
             marginBottom: 32,
             padding: "12px 18px",

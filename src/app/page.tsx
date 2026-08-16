@@ -1,7 +1,4 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth/auth-options";
 import "./landing.css";
 
 const BrandMark = () => (
@@ -22,10 +19,7 @@ const IntensityBars = ({ level }: { level: number }) => (
   </div>
 );
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-  // if (session?.user) redirect("/dashboard");
-
+export default function Home() {
   return (
     <div className="forge-landing">
       {/* NAV */}
