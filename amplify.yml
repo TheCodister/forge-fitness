@@ -5,7 +5,7 @@ frontend:
       commands:
         - corepack enable
         - corepack prepare pnpm@10.15.0 --activate
-        - pnpm install --frozen-lockfile
+        - pnpm install --filter forge-fitness --frozen-lockfile
     build:
       commands:
         - pnpm build:frontend

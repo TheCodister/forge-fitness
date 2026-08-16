@@ -12,10 +12,10 @@ import {
   GOOGLE_CALLBACK_PATH,
   googleAuthorizationUrl,
 } from "../services/google-oauth";
-import { prisma } from "@/lib/db/prisma";
-import { ApiError } from "@/lib/http";
-import { loginSchema, signupSchema } from "@/lib/schemas/auth";
-import { assertRateLimit } from "@/lib/server/rate-limit";
+import { prisma } from "../database/prisma";
+import { ApiError } from "../lib/api-error";
+import { loginSchema, signupSchema } from "../schemas/auth";
+import { assertRateLimit } from "../security/rate-limit";
 
 type GoogleCallbackQuery = {
   code?: string;

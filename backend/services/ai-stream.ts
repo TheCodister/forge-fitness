@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import { generateConversationTitle } from "@/lib/server/ai-title";
-import { appendMessages, updateConversationTitle } from "@/lib/server/chat";
+import { generateConversationTitle } from "../domain/ai-title";
+import { appendMessages, updateConversationTitle } from "../domain/chat";
 
 type AgentEvent = {
   event: string;

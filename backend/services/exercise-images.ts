@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/db/prisma";
-import { ApiError } from "@/lib/http";
+import { prisma } from "../database/prisma";
+import { ApiError } from "../lib/api-error";
 
 const MAX_BATCH_SIZE = 100;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;

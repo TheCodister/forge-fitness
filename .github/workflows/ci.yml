@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # Same reason as the unit job: prisma.config.ts resolves this eagerly.
+      # The backend Prisma config resolves this eagerly during generation.
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/unused
 
     steps:
@@ -40,11 +40,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
-        # tsc resolves @/generated/prisma, so the client must exist first.
-        run: pnpm exec prisma generate
+        run: pnpm prisma:generate
 
       - name: Typecheck
         run: pnpm typecheck
+
+      - name: Typecheck backend
+        run: pnpm build:backend
 
       - name: Lint
         # No --max-warnings yet: the repo carries 8 pre-existing warnings.
@@ -56,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # prisma.config.ts resolves env("DATABASE_URL") eagerly, so `prisma generate`
+      # backend/prisma.config.ts resolves env("DATABASE_URL") eagerly, so generation
       # fails without it. Nothing here connects: the unit tests mock the client.
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/unused
 
@@ -76,7 +78,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
-        run: pnpm exec prisma generate
+        run: pnpm prisma:generate
 
       - name: Run vitest
         run: pnpm test
@@ -132,11 +134,11 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
-        run: pnpm exec prisma generate
+        run: pnpm prisma:generate
 
       - name: Push schema to the test database
         # Prisma 7 dropped --skip-generate from `db push`.
-        run: pnpm exec prisma db push
+        run: pnpm db:push
 
       - name: Seed exercise catalog
         run: pnpm db:seed

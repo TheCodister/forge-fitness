@@ -58,10 +58,10 @@ Use ECS `secrets` entries backed by Secrets Manager or SSM Parameter Store for `
 >
 > ```bash
 > mkdir -p prisma/migrations/0_init
-> pnpm exec prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql
+> pnpm --dir backend exec prisma migrate diff --config prisma.config.ts --from-empty --to-schema ../prisma/schema.prisma --script > ../prisma/migrations/0_init/migration.sql
 > ```
 >
-> For a new empty production database, let the migration task apply `0_init`. For an existing database whose schema already matches, mark the baseline as applied once with `pnpm exec prisma migrate resolve --applied 0_init` using a controlled migration environment. Never run the baseline SQL against an already populated matching database.
+> For a new empty production database, let the migration task apply `0_init`. For an existing database whose schema already matches, mark the baseline as applied once with `pnpm --dir backend exec prisma migrate resolve --config prisma.config.ts --applied 0_init` using a controlled migration environment. Never run the baseline SQL against an already populated matching database.
 
 Build the Dockerfile's migration target and push it under a separate immutable tag:
 

@@ -3,52 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -k -n frontend,backend \"next dev\" \"tsx watch backend/server.ts\"",
+    "dev": "concurrently -k -n frontend,backend \"pnpm dev:frontend\" \"pnpm dev:backend\"",
     "dev:frontend": "next dev",
-    "dev:backend": "tsx watch backend/server.ts",
+    "dev:backend": "pnpm --dir backend dev",
     "build": "next build",
     "build:frontend": "next build",
-    "build:backend": "tsc -p tsconfig.backend.json",
+    "build:backend": "pnpm --dir backend build",
     "start": "pnpm start:backend",
     "start:frontend": "next dev",
-    "start:backend": "node --import tsx backend/server.ts",
-    "lint": "eslint",
+    "start:backend": "pnpm --dir backend start",
+    "lint": "eslint src",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "db:seed": "node prisma/seed.mjs",
-    "db:seed:test-user": "node prisma/seed-test-user.mjs",
-    "db:migrate-exercise-images": "node prisma/migrate-exercise-images.mjs"
+    "prisma:generate": "pnpm --dir backend prisma:generate",
+    "db:push": "pnpm --dir backend db:push",
+    "db:migrate:deploy": "pnpm --dir backend db:migrate:deploy",
+    "db:seed": "pnpm --dir backend db:seed",
+    "db:seed:test-user": "pnpm --dir backend db:seed:test-user",
+    "db:migrate-exercise-images": "pnpm --dir backend db:migrate-exercise-images"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
-    "@fastify/cookie": "^11.1.2",
-    "@fastify/cors": "^11.3.0",
-    "@fastify/helmet": "^13.1.0",
-    "@fastify/jwt": "^10.2.2",
     "@hookform/resolvers": "^5.2.2",
-    "@langchain/anthropic": "^1.3.28",
-    "@langchain/core": "^1.1.44",
-    "@langchain/google-genai": "^2.1.30",
-    "@langchain/langgraph": "^1.2.9",
-    "@langchain/openai": "^1.4.5",
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
     "@tanstack/react-query": "^5.100.2",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "dotenv": "^17.4.2",
-    "fastify": "^5.12.0",
-    "jose": "^6.2.2",
-    "langchain": "^1.3.5",
     "lucide-react": "^1.11.0",
     "next": "16.2.11",
     "next-themes": "^0.4.6",
-    "pg": "^8.20.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.73.1",
@@ -57,7 +43,6 @@
     "shadcn": "^4.4.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
-    "tsx": "^4.19.0",
     "tw-animate-css": "^1.4.0",
     "zod": "^4.3.6"
   },
@@ -70,12 +55,23 @@
     "concurrently": "^10.0.5",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
-    "prisma": "^7.8.0",
     "tailwindcss": "^4",
     "typescript": "^6",
     "vitest": "^4.1.5"
   },
   "pnpm": {
+    "packageExtensions": {
+      "@fastify/cookie@*": {
+        "peerDependencies": {
+          "fastify": "^5.0.0"
+        }
+      },
+      "@fastify/jwt@*": {
+        "peerDependencies": {
+          "fastify": "^5.0.0"
+        }
+      }
+    },
     "overrides": {
       "@hono/node-server": "1.19.14",
       "postcss": "8.5.10"
@@ -88,9 +84,6 @@
       "sharp",
       "unrs-resolver"
     ]
-  },
-  "prisma": {
-    "seed": "node prisma/seed.mjs"
   },
   "packageManager": "pnpm@10.15.0"
 }

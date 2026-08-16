@@ -8,6 +8,8 @@ overrides:
   '@hono/node-server': 1.19.14
   postcss: 8.5.10
 
+packageExtensionsChecksum: sha256-Kbk3tr/J+JA8R6mH/ACZ4V352xi83/p05mJ8yZD69H0=
+
 importers:
 
   .:
@@ -15,42 +17,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.4.1
         version: 1.4.1(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@fastify/cookie':
-        specifier: ^11.1.2
-        version: 11.1.2
-      '@fastify/cors':
-        specifier: ^11.3.0
-        version: 11.3.0
-      '@fastify/helmet':
-        specifier: ^13.1.0
-        version: 13.1.0
-      '@fastify/jwt':
-        specifier: ^10.2.2
-        version: 10.2.2
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.74.0(react@19.2.4))
-      '@langchain/anthropic':
-        specifier: ^1.3.28
-        version: 1.3.28(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
-      '@langchain/core':
-        specifier: ^1.1.44
-        version: 1.1.44(openai@6.35.0(zod@4.3.6))
-      '@langchain/google-genai':
-        specifier: ^2.1.30
-        version: 2.1.30(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
-      '@langchain/langgraph':
-        specifier: ^1.2.9
-        version: 1.2.9(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.3.6))(zod@4.3.6)
-      '@langchain/openai':
-        specifier: ^1.4.5
-        version: 1.4.5(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
-      '@prisma/adapter-pg':
-        specifier: ^7.8.0
-        version: 7.8.0
-      '@prisma/client':
-        specifier: ^7.8.0
-        version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.3))(typescript@6.0.3)
       '@tanstack/react-query':
         specifier: ^5.100.2
         version: 5.100.5(react@19.2.4)
@@ -60,27 +29,12 @@ importers:
       '@vercel/speed-insights':
         specifier: ^2.0.0
         version: 2.0.0(next@16.2.11(@babel/core@7.29.0)(@playwright/test@1.62.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
-      bcryptjs:
-        specifier: ^3.0.3
-        version: 3.0.3
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      dotenv:
-        specifier: ^17.4.2
-        version: 17.4.2
-      fastify:
-        specifier: ^5.12.0
-        version: 5.12.0
-      jose:
-        specifier: ^6.2.2
-        version: 6.2.2
-      langchain:
-        specifier: ^1.3.5
-        version: 1.3.5(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))(openai@6.35.0(zod@4.3.6))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.3.6))
       lucide-react:
         specifier: ^1.11.0
         version: 1.11.0(react@19.2.4)
@@ -90,9 +44,6 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      pg:
-        specifier: ^8.20.0
-        version: 8.20.0
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -117,9 +68,6 @@ importers:
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
-      tsx:
-        specifier: ^4.19.0
-        version: 4.21.0
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
@@ -151,9 +99,6 @@ importers:
       eslint-config-next:
         specifier: 16.2.4
         version: 16.2.4(@typescript-eslint/parser@8.59.0(eslint@9.39.4(jiti@2.6.1))(typescript@6.0.3))(eslint@9.39.4(jiti@2.6.1))(typescript@6.0.3)
-      prisma:
-        specifier: ^7.8.0
-        version: 7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.3)
       tailwindcss:
         specifier: ^4
         version: 4.2.4
@@ -163,6 +108,73 @@ importers:
       vitest:
         specifier: ^4.1.5
         version: 4.1.5(@types/node@26.1.0)(msw@2.13.6(@types/node@26.1.0)(typescript@6.0.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0))
+
+  backend:
+    dependencies:
+      '@fastify/cookie':
+        specifier: ^11.1.2
+        version: 11.1.2(fastify@5.12.0)
+      '@fastify/cors':
+        specifier: ^11.3.0
+        version: 11.3.0
+      '@fastify/helmet':
+        specifier: ^13.1.0
+        version: 13.1.0
+      '@fastify/jwt':
+        specifier: ^10.2.2
+        version: 10.2.2(fastify@5.12.0)
+      '@langchain/anthropic':
+        specifier: ^1.3.28
+        version: 1.3.28(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
+      '@langchain/core':
+        specifier: ^1.1.44
+        version: 1.1.44(openai@6.35.0(zod@4.3.6))
+      '@langchain/google-genai':
+        specifier: ^2.1.30
+        version: 2.1.30(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
+      '@langchain/langgraph':
+        specifier: ^1.2.9
+        version: 1.2.9(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.3.6))(zod@4.3.6)
+      '@langchain/openai':
+        specifier: ^1.4.5
+        version: 1.4.5(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
+      '@prisma/adapter-pg':
+        specifier: ^7.8.0
+        version: 7.8.0
+      '@prisma/client':
+        specifier: ^7.8.0
+        version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
+      bcryptjs:
+        specifier: ^3.0.3
+        version: 3.0.3
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+      fastify:
+        specifier: ^5.12.0
+        version: 5.12.0
+      pg:
+        specifier: ^8.20.0
+        version: 8.20.0
+      tsx:
+        specifier: ^4.19.0
+        version: 4.21.0
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@types/node':
+        specifier: ^26
+        version: 26.1.0
+      prisma:
+        specifier: ^7.8.0
+        version: 7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^4.1.5
+        version: 4.1.5(@types/node@26.1.0)(msw@2.13.6(@types/node@26.1.0)(typescript@5.9.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0))
 
 packages:
 
@@ -581,6 +593,8 @@ packages:
 
   '@fastify/cookie@11.1.2':
     resolution: {integrity: sha512-Dtrpk/YOGUsbRMvP/8ZqPpwnMRv0qSqodFdoQ2B589Obc7jw4s4Qla+cV72Bsm7WsZJnqlYFX/i7uSBq0xzg6g==}
+    peerDependencies:
+      fastify: ^5.0.0
 
   '@fastify/cors@11.3.0':
     resolution: {integrity: sha512-ggQGua+xHv1MvePbPr0v//xLYEsCXbWspquXCJS9Ot5YoRXq8J8ZWzHnxDBVnbtXosvistXo6LtNzOJswf64Fw==}
@@ -599,6 +613,8 @@ packages:
 
   '@fastify/jwt@10.2.2':
     resolution: {integrity: sha512-UOYY5db2ttuWk2FcN5L6rawE0OFa4+QRJdsYEiHCBmf1GFLC9/k73f/mmv2dxIhS0b/02/62T0Hs6sk+w18Tyg==}
+    peerDependencies:
+      fastify: ^5.0.0
 
   '@fastify/merge-json-schemas@0.2.1':
     resolution: {integrity: sha512-OA3KGBCy6KtIvLf8DINC5880o5iBlDX4SxzLQS8HorJAbqluzLRn80UXU0bxZn7UOFhFgpRJDasfwn9nG4FG4A==}
@@ -3103,12 +3119,6 @@ packages:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
 
-  langchain@1.3.5:
-    resolution: {integrity: sha512-QSB8TEo6G1tWupgNt1Osm8ylLLoOMq1lLw5NeijnIwRPI5BqdBjUn4/U8usbjEJJcQnbXSK2qTKgTx7zvblnBw==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      '@langchain/core': ^1.1.42
-
   langsmith@0.6.0:
     resolution: {integrity: sha512-GGaj5IMRfLv2HXXFzGk9diISMYLTpSTh6fzCZGKxWYW/NqEztIFtnXLq6G/RVhzFRmCykLap1fuC67LVKoQLcg==}
     peerDependencies:
@@ -4507,6 +4517,11 @@ packages:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.1.0'
 
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
@@ -5206,9 +5221,10 @@ snapshots:
       ajv-formats: 3.0.1(ajv@8.20.0)
       fast-uri: 4.1.2
 
-  '@fastify/cookie@11.1.2':
+  '@fastify/cookie@11.1.2(fastify@5.12.0)':
     dependencies:
       cookie: 2.0.1
+      fastify: 5.12.0
       fastify-plugin: 6.0.0
 
   '@fastify/cors@11.3.0':
@@ -5229,11 +5245,12 @@ snapshots:
       fastify-plugin: 6.0.0
       helmet: 8.3.0
 
-  '@fastify/jwt@10.2.2':
+  '@fastify/jwt@10.2.2(fastify@5.12.0)':
     dependencies:
       '@fastify/error': 4.2.0
       '@lukeed/ms': 2.0.2
       fast-jwt: 6.3.2
+      fastify: 5.12.0
       fastify-plugin: 6.0.0
       steed: 1.1.3
 
@@ -5637,12 +5654,12 @@ snapshots:
 
   '@prisma/client-runtime-utils@7.8.0': {}
 
-  '@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.3))(typescript@6.0.3)':
+  '@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@prisma/client-runtime-utils': 7.8.0
     optionalDependencies:
-      prisma: 7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.3)
-      typescript: 6.0.3
+      prisma: 7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      typescript: 5.9.3
 
   '@prisma/config@7.8.0':
     dependencies:
@@ -5657,7 +5674,7 @@ snapshots:
 
   '@prisma/debug@7.8.0': {}
 
-  '@prisma/dev@0.24.3(typescript@6.0.3)':
+  '@prisma/dev@0.24.3(typescript@5.9.3)':
     dependencies:
       '@electric-sql/pglite': 0.4.1
       '@electric-sql/pglite-socket': 0.1.1(@electric-sql/pglite@0.4.1)
@@ -5674,7 +5691,7 @@ snapshots:
       proper-lockfile: 4.1.2
       remeda: 2.33.4
       std-env: 3.10.0
-      valibot: 1.2.0(typescript@6.0.3)
+      valibot: 1.2.0(typescript@5.9.3)
       zeptomatch: 2.1.0
     transitivePeerDependencies:
       - typescript
@@ -6169,6 +6186,15 @@ snapshots:
       '@vitest/utils': 4.1.5
       chai: 6.2.2
       tinyrainbow: 3.1.0
+
+  '@vitest/mocker@4.1.5(msw@2.13.6(@types/node@26.1.0)(typescript@5.9.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0))':
+    dependencies:
+      '@vitest/spy': 4.1.5
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      msw: 2.13.6(@types/node@26.1.0)(typescript@5.9.3)
+      vite: 8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)
 
   '@vitest/mocker@4.1.5(msw@2.13.6(@types/node@26.1.0)(typescript@6.0.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0))':
     dependencies:
@@ -7778,25 +7804,6 @@ snapshots:
 
   kleur@4.1.5: {}
 
-  langchain@1.3.5(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))(openai@6.35.0(zod@4.3.6))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.3.6)):
-    dependencies:
-      '@langchain/core': 1.1.44(openai@6.35.0(zod@4.3.6))
-      '@langchain/langgraph': 1.2.9(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod-to-json-schema@3.25.2(zod@4.3.6))(zod@4.3.6)
-      '@langchain/langgraph-checkpoint': 1.0.1(@langchain/core@1.1.44(openai@6.35.0(zod@4.3.6)))
-      langsmith: 0.6.0(openai@6.35.0(zod@4.3.6))
-      zod: 4.3.6
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-      - '@opentelemetry/exporter-trace-otlp-proto'
-      - '@opentelemetry/sdk-trace-base'
-      - openai
-      - react
-      - react-dom
-      - svelte
-      - vue
-      - ws
-      - zod-to-json-schema
-
   langsmith@0.6.0(openai@6.35.0(zod@4.3.6)):
     dependencies:
       p-queue: 6.6.2
@@ -8342,6 +8349,32 @@ snapshots:
 
   ms@2.1.3: {}
 
+  msw@2.13.6(@types/node@26.1.0)(typescript@5.9.3):
+    dependencies:
+      '@inquirer/confirm': 6.0.12(@types/node@26.1.0)
+      '@mswjs/interceptors': 0.41.6
+      '@open-draft/deferred-promise': 3.0.0
+      '@types/statuses': 2.0.6
+      cookie: 1.1.1
+      graphql: 16.13.2
+      headers-polyfill: 5.0.1
+      is-node-process: 1.2.0
+      outvariant: 1.4.3
+      path-to-regexp: 6.3.0
+      picocolors: 1.1.1
+      rettime: 0.11.8
+      statuses: 2.0.2
+      strict-event-emitter: 0.5.1
+      tough-cookie: 6.0.1
+      type-fest: 5.6.0
+      until-async: 3.0.2
+      yargs: 17.7.2
+    optionalDependencies:
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - '@types/node'
+    optional: true
+
   msw@2.13.6(@types/node@26.1.0)(typescript@6.0.3):
     dependencies:
       '@inquirer/confirm': 6.0.12(@types/node@26.1.0)
@@ -8748,16 +8781,16 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.3):
+  prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3):
     dependencies:
       '@prisma/config': 7.8.0
-      '@prisma/dev': 0.24.3(typescript@6.0.3)
+      '@prisma/dev': 0.24.3(typescript@5.9.3)
       '@prisma/engines': 7.8.0
       '@prisma/studio-core': 0.27.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       mysql2: 3.15.3
       postgres: 3.4.7
     optionalDependencies:
-      typescript: 6.0.3
+      typescript: 5.9.3
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -9511,6 +9544,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  typescript@5.9.3: {}
+
   typescript@6.0.3: {}
 
   unbox-primitive@1.1.0:
@@ -9607,9 +9642,9 @@ snapshots:
 
   uuid@13.0.2: {}
 
-  valibot@1.2.0(typescript@6.0.3):
+  valibot@1.2.0(typescript@5.9.3):
     optionalDependencies:
-      typescript: 6.0.3
+      typescript: 5.9.3
 
   validate-npm-package-name@7.0.2: {}
 
@@ -9638,6 +9673,33 @@ snapshots:
       fsevents: 2.3.3
       jiti: 2.6.1
       tsx: 4.21.0
+
+  vitest@4.1.5(@types/node@26.1.0)(msw@2.13.6(@types/node@26.1.0)(typescript@5.9.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)):
+    dependencies:
+      '@vitest/expect': 4.1.5
+      '@vitest/mocker': 4.1.5(msw@2.13.6(@types/node@26.1.0)(typescript@5.9.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0))
+      '@vitest/pretty-format': 4.1.5
+      '@vitest/runner': 4.1.5
+      '@vitest/snapshot': 4.1.5
+      '@vitest/spy': 4.1.5
+      '@vitest/utils': 4.1.5
+      es-module-lexer: 2.1.0
+      expect-type: 1.3.0
+      magic-string: 0.30.21
+      obug: 2.1.1
+      pathe: 2.0.3
+      picomatch: 4.0.4
+      std-env: 4.1.0
+      tinybench: 2.9.0
+      tinyexec: 1.1.1
+      tinyglobby: 0.2.16
+      tinyrainbow: 3.1.0
+      vite: 8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 26.1.0
+    transitivePeerDependencies:
+      - msw
 
   vitest@4.1.5(@types/node@26.1.0)(msw@2.13.6(@types/node@26.1.0)(typescript@6.0.3))(vite@8.0.10(@types/node@26.1.0)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)):
     dependencies:

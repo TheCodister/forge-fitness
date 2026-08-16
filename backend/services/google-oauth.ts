@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/db/prisma";
-import { ApiError } from "@/lib/http";
+import { prisma } from "../database/prisma";
+import { ApiError } from "../lib/api-error";
 
 type GoogleTokens = {
   access_token: string;

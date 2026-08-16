@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync, FastifyReply } from "fastify";
 
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../database/prisma";
 
 async function readiness(reply: FastifyReply) {
   const startedAt = performance.now();

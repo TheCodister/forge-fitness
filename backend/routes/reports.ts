@@ -2,7 +2,7 @@ import type { FastifyPluginAsync } from "fastify";
 
 import { requireUser } from "../auth";
 import type { StringQuery } from "../types";
-import { getProgressReport, getSummaryReport } from "@/lib/server/workouts";
+import { getProgressReport, getSummaryReport } from "../domain/workouts";
 
 export const reportRoutes: FastifyPluginAsync = async (app) => {
   app.get("/api/reports/summary", async (request) => {

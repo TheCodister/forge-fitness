@@ -9,10 +9,10 @@ import {
   parseExerciseIds,
 } from "../services/exercise-images";
 import type { IdParams, StringQuery } from "../types";
-import { getExerciseImageUrl } from "@/lib/exercise-images";
-import { ApiError } from "@/lib/http";
-import { getExerciseById, listExercises } from "@/lib/server/exercises";
-import { assertRateLimit } from "@/lib/server/rate-limit";
+import { getExerciseById, listExercises } from "../domain/exercises";
+import { ApiError } from "../lib/api-error";
+import { getExerciseImageUrl } from "../lib/exercise-images";
+import { assertRateLimit } from "../security/rate-limit";
 
 type ImageQuery = {
   exerciseId?: string;

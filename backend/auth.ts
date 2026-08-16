@@ -1,8 +1,8 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import fastifyJwt from "@fastify/jwt";
+import { fastifyJwt } from "@fastify/jwt";
 
-import { prisma } from "@/lib/db/prisma";
-import { ApiError } from "@/lib/http";
+import { prisma } from "./database/prisma";
+import { ApiError } from "./lib/api-error";
 
 export type AuthUser = {
   id: string;

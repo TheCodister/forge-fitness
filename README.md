@@ -61,7 +61,7 @@ Forge Fitness is a comprehensive workout tracking and management system built wi
 
 ### Backend
 
-- **Runtime**: Node.js with Next.js API Routes
+- **Runtime**: Node.js with Fastify 5, deployed independently from Next.js
 - **Database**: [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
 - **Authentication**: [jose](https://github.com/panva/jose) for JWT handling
 - **Password Hashing**: [bcryptjs](https://github.com/dcodeIO/bcrypt.js)
@@ -71,7 +71,7 @@ Forge Fitness is a comprehensive workout tracking and management system built wi
 
 - **Provider**: PostgreSQL with Prisma Adapter
 - **ORM**: [Prisma](https://www.prisma.io/)
-- **Client**: Custom generated client in `src/generated/prisma`
+- **Client**: Custom generated client in `backend/generated/prisma`
 
 ### Testing & Quality
 
@@ -82,8 +82,19 @@ Forge Fitness is a comprehensive workout tracking and management system built wi
 
 ```
 forge-fitness/
+├── backend/                     # Standalone Fastify API workspace
+│   ├── database/                # Prisma connection
+│   ├── domain/                  # Business logic
+│   ├── generated/prisma/        # Generated Prisma client
+│   ├── plugins/                 # Fastify plugins
+│   ├── routes/                  # HTTP route modules
+│   ├── schemas/                 # Backend validation schemas
+│   ├── security/                # Rate limiting and security helpers
+│   ├── services/                # External integrations and streaming
+│   ├── Dockerfile               # ECS/Fargate image
+│   └── package.json             # Backend-only dependencies and scripts
 ├── src/
-│   ├── app/                      # Next.js app directory
+│   ├── app/                     # Static Next.js pages and layouts
 │   │   ├── (app)/               # Protected routes
 │   │   │   ├── dashboard/       # Dashboard page
 │   │   │   ├── reports/         # Reports pages
@@ -92,12 +103,6 @@ forge-fitness/
 │   │   ├── (auth)/              # Public auth routes
 │   │   │   ├── login/
 │   │   │   └── signup/
-│   │   ├── api/                 # API routes
-│   │   │   ├── auth/            # Authentication endpoints
-│   │   │   ├── exercises/       # Exercise endpoints
-│   │   │   ├── reports/         # Reports endpoints
-│   │   │   ├── workout-sessions/
-│   │   │   └── workout-templates/
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
@@ -115,20 +120,12 @@ forge-fitness/
 │   │   └── workouts/
 │   │       ├── api/             # React Query hooks
 │   │       └── components/      # Feature-specific components
-│   ├── generated/               # Auto-generated code
-│   │   └── prisma/              # Prisma client
 │   ├── hooks/                   # Custom React hooks
-│   ├── lib/                     # Utility functions and helpers
-│   │   ├── api/                 # HTTP client utilities
-│   │   ├── auth/                # Authentication utilities
-│   │   ├── db/                  # Database utilities
-│   │   ├── schemas/             # Zod validation schemas
-│   │   └── server/              # Server-side utilities
+│   ├── lib/                     # Browser-safe utilities and API client
 │   └── types/                   # TypeScript type definitions
 ├── prisma/
 │   ├── schema.prisma            # Database schema
 │   ├── seed.mjs                 # Database seeding script
-│   ├── seed.test.ts             # Seed script tests
 │   └── exercise-catalog.mjs     # Exercise data
 ├── docs/
 │   └── openapi.yaml             # API documentation
@@ -136,12 +133,12 @@ forge-fitness/
 └── Configuration files
     ├── next.config.ts
     ├── tsconfig.json
-    ├── tailwind.config.js
     ├── postcss.config.mjs
     ├── eslint.config.mjs
     ├── vitest.config.ts
     ├── components.json           # shadcn/ui config
-    └── package.json
+    ├── package.json              # Frontend dependencies and scripts
+    └── pnpm-workspace.yaml
 ```
 
 ## 🗄 Database Schema
@@ -180,7 +177,7 @@ forge-fitness/
 
 ### Prerequisites
 
-- Node.js (v18+)
+- Node.js 22
 - pnpm (or npm/yarn/bun)
 - PostgreSQL database
 
@@ -191,7 +188,7 @@ forge-fitness/
 
    ```bash
    git clone <repository>
-   cd job-application-agent
+   cd forge-fitness
    pnpm install
    ```
 

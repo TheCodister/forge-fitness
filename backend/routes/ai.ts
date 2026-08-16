@@ -4,17 +4,17 @@ import { requireUser } from "../auth";
 import { clientIp } from "../config";
 import { streamAgentResponse } from "../services/ai-stream";
 import type { IdParams } from "../types";
-import { chatMessageCreateSchema } from "@/lib/schemas/ai";
-import { runTrainerAgent } from "@/lib/server/ai-agent";
-import { getDecryptedAiSettings, getAiSettings, upsertAiSettings } from "@/lib/server/ai-settings";
+import { runTrainerAgent } from "../domain/ai-agent";
+import { getDecryptedAiSettings, getAiSettings, upsertAiSettings } from "../domain/ai-settings";
 import {
   appendMessages,
   createConversation,
   deleteConversation,
   getConversation,
   listConversations,
-} from "@/lib/server/chat";
-import { assertRateLimit } from "@/lib/server/rate-limit";
+} from "../domain/chat";
+import { chatMessageCreateSchema } from "../schemas/ai";
+import { assertRateLimit } from "../security/rate-limit";
 
 type AiRoutesOptions = {
   allowedOrigins: string[];

@@ -13,7 +13,7 @@ import {
   listWorkoutTemplates,
   updateWorkoutSession,
   updateWorkoutTemplate,
-} from "@/lib/server/workouts";
+} from "../domain/workouts";
 
 export const workoutRoutes: FastifyPluginAsync = async (app) => {
   app.get("/api/workout-templates", async (request) => {

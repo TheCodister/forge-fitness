@@ -1,4 +1,4 @@
-import fastifyCookie from "@fastify/cookie";
+import { fastifyCookie } from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import Fastify from "fastify";
@@ -12,7 +12,7 @@ import { exerciseRoutes } from "./routes/exercises";
 import { healthRoutes } from "./routes/health";
 import { reportRoutes } from "./routes/reports";
 import { workoutRoutes } from "./routes/workouts";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "./database/prisma";
 
 export async function buildApp() {
   const app = Fastify({

@@ -1,7 +1,7 @@
 import type { FastifyInstance, FastifyReply } from "fastify";
 import { ZodError } from "zod";
 
-import { ApiError } from "@/lib/http";
+import { ApiError } from "../lib/api-error";
 
 function copyErrorHeaders(error: ApiError, reply: FastifyReply) {
   if (!error.headers) return;
