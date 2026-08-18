@@ -1,12 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Settings } from "lucide-react";
-import { requireUser } from "@/lib/server/auth";
-import { getAiSettings } from "@/lib/server/ai-settings";
 import { ConversationList } from "@/features/trainer/components/conversation-list";
 
-export default async function TrainerPage() {
-  const user = await requireUser();
-  const settings = await getAiSettings(user.id);
+// TODO(task-8): fetch ai settings client-side via React Query and gate the
+// "AI settings not configured" banner on the real value. For now, assume
+// settings may be unset so the banner shows.
+export default function TrainerPage() {
+  const settings: unknown = null;
 
   return (
     <div

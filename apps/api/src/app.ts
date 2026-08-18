@@ -13,6 +13,7 @@ import {
 import { env } from "./config.js";
 import { authPlugin } from "./plugins/auth.js";
 import { registerErrorHandler } from "./plugins/error-handler.js";
+import { authRoutes } from "./routes/auth.js";
 import { healthRoutes } from "./routes/health.js";
 
 export async function buildApp(): Promise<FastifyInstance> {
@@ -51,6 +52,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   registerErrorHandler(app);
 
   await app.register(healthRoutes, { prefix: "/health" });
+  await app.register(authRoutes, { prefix: "/auth" });
 
   return app;
 }

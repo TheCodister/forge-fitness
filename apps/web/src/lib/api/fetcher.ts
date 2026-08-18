@@ -2,6 +2,8 @@
 
 import type { ApiErrorShape } from "@/types/api";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+
 export class ClientApiError extends Error {
   constructor(
     public status: number,
@@ -13,8 +15,19 @@ export class ClientApiError extends Error {
   }
 }
 
+function resolveUrl(input: RequestInfo): RequestInfo {
+  if (typeof input !== "string") return input;
+  if (input.startsWith("http://") || input.startsWith("https://")) return input;
+  if (!API_BASE_URL) return input;
+  if (input.startsWith("/api/")) {
+    return `${API_BASE_URL}${input.replace(/^\/api/, "")}`;
+  }
+  if (input.startsWith("/")) return `${API_BASE_URL}${input}`;
+  return input;
+}
+
 export async function apiFetch<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const response = await fetch(input, {
+  const response = await fetch(resolveUrl(input), {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",

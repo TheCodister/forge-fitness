@@ -1,29 +1,28 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import { AppShell } from "@/components/layout/app-shell";
-import { authOptions } from "@/lib/auth/auth-options";
-import { prisma } from "@/lib/db/prisma";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
-export default async function ProtectedAppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const session = await getServerSession(authOptions);
+export default function ProtectedAppLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { data, isLoading } = useCurrentUser();
 
-  if (!session?.user?.id) {
-    redirect("/login");
+  useEffect(() => {
+    if (!isLoading && !data.user) {
+      router.replace("/login");
+    }
+  }, [isLoading, data.user, router]);
+
+  if (isLoading || !data.user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-zinc-500">
+        Loading…
+      </div>
+    );
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, email: true, name: true, image: true, createdAt: true },
-  });
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  return <AppShell user={user}>{children}</AppShell>;
+  return <AppShell user={data.user}>{children}</AppShell>;
 }

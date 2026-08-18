@@ -1,10 +1,20 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth/auth-options";
+"use client";
 
-export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
-  if (session?.user) redirect("/dashboard");
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+import { useCurrentUser } from "@/hooks/use-current-user";
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { data, isLoading } = useCurrentUser();
+
+  useEffect(() => {
+    if (!isLoading && data.user) {
+      router.replace("/dashboard");
+    }
+  }, [isLoading, data.user, router]);
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(251,146,60,0.22),_transparent_28%),linear-gradient(180deg,_#111_0%,_#090909_42%,_#040404_100%)] px-4 py-10 text-white">
       <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-6xl items-center justify-center gap-10">
@@ -14,7 +24,8 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
             Train with structure. Track with intention.
           </h1>
           <p className="text-lg leading-8 text-zinc-300">
-            Build reusable workout templates, schedule sessions with precision, and keep a clear picture of your progress over time.
+            Build reusable workout templates, schedule sessions with precision, and keep a
+            clear picture of your progress over time.
           </p>
         </div>
         {children}
