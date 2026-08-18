@@ -1,0 +1,52 @@
+version: 1
+applications:
+  - appRoot: apps/web
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - corepack enable
+            - corepack prepare pnpm@10 --activate
+            # Amplify runs from apps/web (appRoot). Install the whole workspace
+            # from the repo root so @forge/shared resolves.
+            - cd ../.. && pnpm install --frozen-lockfile --filter @forge/web...
+        build:
+          commands:
+            - cd ../.. && pnpm --filter @forge/web run build
+      artifacts:
+        baseDirectory: out
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - ../../node_modules/**/*
+          - ../../.pnpm-store/**/*
+    customHeaders:
+      - pattern: "**/*"
+        headers:
+          - key: X-Frame-Options
+            value: DENY
+          - key: X-Content-Type-Options
+            value: nosniff
+          - key: Referrer-Policy
+            value: strict-origin-when-cross-origin
+          - key: Permissions-Policy
+            value: "camera=(), microphone=(), geolocation=()"
+    # SPA fallback for dynamic [id] routes.
+    #
+    # generateStaticParams emits placeholder HTML at /<segment>/_/index.html
+    # for each dynamic segment. Deep links to real IDs (e.g. /workouts/abc/)
+    # must rewrite to the matching placeholder so useParams reads the URL and
+    # the client hook fetches the real record.
+    #
+    # A blanket rewrite to /index.html renders the root route and breaks these
+    # pages. Configure PER-SEGMENT rewrites in the Amplify console
+    # ("Rewrites and redirects"):
+    #
+    #   Source: /workouts/<*>              Target: /workouts/_/index.html   Type: 200 (Rewrite)
+    #   Source: /templates/<*>             Target: /templates/_/index.html  Type: 200 (Rewrite)
+    #   Source: /trainer/<*>               Target: /trainer/_/index.html    Type: 200 (Rewrite)
+    #
+    # Order matters: place these ABOVE the generic 404-fallback rule. Static
+    # sibling routes (/workouts, /workouts/new) still resolve because their
+    # HTML files exist and are matched before the wildcard.

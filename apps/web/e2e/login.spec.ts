@@ -27,7 +27,7 @@ test.describe("login", () => {
 
     await submit.click();
 
-    // next-auth signs in over fetch, then the client router replaces the URL.
+    // Fastify sets the ff_token cookie, then the client router replaces the URL.
     await page.waitForURL("**/dashboard", { timeout: 30_000 });
     await page.waitForLoadState("networkidle");
 
