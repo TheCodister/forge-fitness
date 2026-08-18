@@ -23,14 +23,14 @@ type TemplatePayload = {
 export function useTemplates() {
   return useQuery({
     queryKey: ["templates"],
-    queryFn: () => apiFetch<WorkoutTemplate[]>("/api/workout-templates"),
+    queryFn: () => apiFetch<WorkoutTemplate[]>("/workout-templates"),
   });
 }
 
 export function useTemplate(id: string) {
   return useQuery({
     queryKey: ["templates", id],
-    queryFn: () => apiFetch<WorkoutTemplate>(`/api/workout-templates/${id}`),
+    queryFn: () => apiFetch<WorkoutTemplate>(`/workout-templates/${id}`),
     enabled: Boolean(id),
   });
 }
@@ -39,7 +39,7 @@ export function useCreateTemplate() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: TemplatePayload) =>
-      apiFetch<WorkoutTemplate>("/api/workout-templates", {
+      apiFetch<WorkoutTemplate>("/workout-templates", {
         method: "POST",
         body: JSON.stringify(payload),
       }),
@@ -53,7 +53,7 @@ export function useUpdateTemplate(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: Partial<TemplatePayload>) =>
-      apiFetch<WorkoutTemplate>(`/api/workout-templates/${id}`, {
+      apiFetch<WorkoutTemplate>(`/workout-templates/${id}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       }),
@@ -68,7 +68,7 @@ export function useDeleteTemplate() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      apiFetch<void>(`/api/workout-templates/${id}`, {
+      apiFetch<void>(`/workout-templates/${id}`, {
         method: "DELETE",
       }),
     onSuccess: () => {

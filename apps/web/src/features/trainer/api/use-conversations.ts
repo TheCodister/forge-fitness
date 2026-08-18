@@ -17,14 +17,14 @@ export type ConversationWithMessages = Conversation & {
 export function useConversations() {
   return useQuery({
     queryKey: ["conversations"],
-    queryFn: () => apiFetch<Conversation[]>("/api/ai/conversations"),
+    queryFn: () => apiFetch<Conversation[]>("/ai/conversations"),
   });
 }
 
 export function useConversation(id: string) {
   return useQuery({
     queryKey: ["conversation", id],
-    queryFn: () => apiFetch<ConversationWithMessages>(`/api/ai/conversations/${id}`),
+    queryFn: () => apiFetch<ConversationWithMessages>(`/ai/conversations/${id}`),
     enabled: Boolean(id),
   });
 }
@@ -33,7 +33,7 @@ export function useCreateConversation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () =>
-      apiFetch<Conversation>("/api/ai/conversations", { method: "POST" }),
+      apiFetch<Conversation>("/ai/conversations", { method: "POST" }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
@@ -44,7 +44,7 @@ export function useDeleteConversation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      apiFetch<void>(`/api/ai/conversations/${id}`, { method: "DELETE" }),
+      apiFetch<void>(`/ai/conversations/${id}`, { method: "DELETE" }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },

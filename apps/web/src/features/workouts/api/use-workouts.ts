@@ -25,7 +25,7 @@ type SessionPayload = {
 };
 
 export function useWorkoutSessions(query?: string) {
-  const path = query ? `/api/workout-sessions?${query}` : "/api/workout-sessions";
+  const path = query ? `/workout-sessions?${query}` : "/workout-sessions";
   return useQuery({
     queryKey: ["workout-sessions", query ?? ""],
     queryFn: () => apiFetch<WorkoutSession[]>(path),
@@ -35,7 +35,7 @@ export function useWorkoutSessions(query?: string) {
 export function useWorkoutSession(id: string) {
   return useQuery({
     queryKey: ["workout-session", id],
-    queryFn: () => apiFetch<WorkoutSession>(`/api/workout-sessions/${id}`),
+    queryFn: () => apiFetch<WorkoutSession>(`/workout-sessions/${id}`),
     enabled: Boolean(id),
   });
 }
@@ -44,7 +44,7 @@ export function useCreateWorkoutSession() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: SessionPayload) =>
-      apiFetch<WorkoutSession>("/api/workout-sessions", {
+      apiFetch<WorkoutSession>("/workout-sessions", {
         method: "POST",
         body: JSON.stringify(payload),
       }),
@@ -58,7 +58,7 @@ export function useUpdateWorkoutSession(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: Partial<SessionPayload>) =>
-      apiFetch<WorkoutSession>(`/api/workout-sessions/${id}`, {
+      apiFetch<WorkoutSession>(`/workout-sessions/${id}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       }),
@@ -75,7 +75,7 @@ export function useDeleteWorkoutSession() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      apiFetch<void>(`/api/workout-sessions/${id}`, {
+      apiFetch<void>(`/workout-sessions/${id}`, {
         method: "DELETE",
       }),
     onSuccess: () => {

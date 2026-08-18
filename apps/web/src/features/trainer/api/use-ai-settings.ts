@@ -18,7 +18,7 @@ type UpsertPayload = {
 export function useAiSettings() {
   return useQuery({
     queryKey: ["ai-settings"],
-    queryFn: () => apiFetch<AiSettingsData>("/api/ai/settings"),
+    queryFn: () => apiFetch<AiSettingsData>("/ai/settings"),
   });
 }
 
@@ -26,7 +26,7 @@ export function useUpsertAiSettings() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: UpsertPayload) =>
-      apiFetch<AiSettingsData>("/api/ai/settings", {
+      apiFetch<AiSettingsData>("/ai/settings", {
         method: "PUT",
         body: JSON.stringify(payload),
       }),

@@ -21,7 +21,7 @@ export function NewChatWindow() {
     if (isCreating) return;
     setIsCreating(true);
     try {
-      const conversation = await apiFetch<Conversation>("/api/ai/conversations", { method: "POST" });
+      const conversation = await apiFetch<Conversation>("/ai/conversations", { method: "POST" });
       sessionStorage.setItem(`pending_${conversation.id}`, content);
       router.push(`/trainer/${conversation.id}`);
     } catch {

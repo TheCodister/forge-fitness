@@ -34,7 +34,7 @@ export function useExercises(query?: ExerciseQuery) {
   return useQuery({
     queryKey: ["exercises", query],
     queryFn: async () => {
-      const exercises = await apiFetch<Exercise[]>(`/api/exercises?${params.toString()}`);
+      const exercises = await apiFetch<Exercise[]>(`/exercises?${params.toString()}`);
       const exerciseIds = Array.from(
         new Set(
           exercises
@@ -51,7 +51,7 @@ export function useExercises(query?: ExerciseQuery) {
         exerciseIds: exerciseIds.join(","),
       });
       const imageResponse = await apiFetch<ExerciseImageListResponse>(
-        `/api/exercises/image?${imageParams.toString()}`
+        `/exercises/image?${imageParams.toString()}`
       );
 
       const imageByExerciseId = new Map(
@@ -81,7 +81,7 @@ export function useExercises(query?: ExerciseQuery) {
 export function useExercise(id: string) {
   return useQuery({
     queryKey: ["exercises", id],
-    queryFn: () => apiFetch<Exercise>(`/api/exercises/${id}`),
+    queryFn: () => apiFetch<Exercise>(`/exercises/${id}`),
     enabled: !!id,
   });
 }
