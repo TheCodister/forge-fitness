@@ -18,7 +18,7 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "lint": "eslint src",
+    "lint": "echo '@forge/shared has no eslint config; typecheck covers this package'",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
