@@ -11,6 +11,8 @@ import {
 } from "fastify-type-provider-zod";
 
 import { env } from "./config.js";
+import { authPlugin } from "./plugins/auth.js";
+import { registerErrorHandler } from "./plugins/error-handler.js";
 import { healthRoutes } from "./routes/health.js";
 
 export async function buildApp(): Promise<FastifyInstance> {
@@ -44,6 +46,9 @@ export async function buildApp(): Promise<FastifyInstance> {
     secret: env.JWT_SECRET,
     cookie: { cookieName: "ff_token", signed: false },
   });
+  await app.register(authPlugin);
+
+  registerErrorHandler(app);
 
   await app.register(healthRoutes, { prefix: "/health" });
 
