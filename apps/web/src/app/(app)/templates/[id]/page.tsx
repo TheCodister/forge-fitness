@@ -1,13 +1,11 @@
-"use client";
+import { TemplateDetailClient } from "./template-detail-client";
 
-import { PageHeader } from "@/components/shared/page-header";
+export const dynamicParams = false;
 
-// TODO(task-8): fetch template client-side via React Query and render
-// <TemplateForm template={template} />. Stubbed while the auth swap lands.
+export function generateStaticParams() {
+  return [{ id: "_" }];
+}
+
 export default function TemplateDetailPage() {
-  return (
-    <div className="space-y-8">
-      <PageHeader title="Template" description="Loading…" />
-    </div>
-  );
+  return <TemplateDetailClient />;
 }

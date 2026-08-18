@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { Settings } from "lucide-react";
 import { ConversationList } from "@/features/trainer/components/conversation-list";
+import { useAiSettings } from "@/features/trainer/api/use-ai-settings";
 
-// TODO(task-8): fetch ai settings client-side via React Query and gate the
-// "AI settings not configured" banner on the real value. For now, assume
-// settings may be unset so the banner shows.
 export default function TrainerPage() {
-  const settings: unknown = null;
+  const { data: settings, isLoading } = useAiSettings();
+  const showBanner = !isLoading && !settings;
 
   return (
     <div
@@ -75,7 +74,7 @@ export default function TrainerPage() {
           textAlign: "center",
         }}
       >
-        {!settings && (
+        {showBanner && (
           <div style={{
             marginBottom: 32,
             padding: "12px 18px",
