@@ -8,8 +8,14 @@ import type { NextConfig } from "next";
 // and cache far more of the filesystem than it should.
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
+// `output: 'export'` is on for `next build` (production) but off during
+// `next dev` so dynamic segments like /workouts/[id]/ can resolve at
+// runtime without needing generateStaticParams to enumerate user IDs.
+// Amplify serves the built shell for unknown IDs via the SPA rewrite.
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
-  output: "export",
+  ...(isDev ? {} : { output: "export" as const }),
   poweredByHeader: false,
   trailingSlash: true,
   images: { unoptimized: true },

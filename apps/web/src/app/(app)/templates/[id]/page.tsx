@@ -1,7 +1,5 @@
 import { TemplateDetailClient } from "./template-detail-client";
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return [{ id: "_" }];
 }

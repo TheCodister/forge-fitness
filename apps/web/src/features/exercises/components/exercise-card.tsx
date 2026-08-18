@@ -29,9 +29,11 @@ export function ExerciseCard({ exercise, onClick }: ExerciseCardProps) {
           {exercise.name}
         </p>
         <div className="flex flex-wrap gap-1">
-          <Badge className="border-orange-500/20 bg-orange-500/10 px-1.5 py-0 text-xs text-orange-300">
-            {exercise.muscleGroup.replace("_", " ")}
-          </Badge>
+          {exercise.muscleGroup && (
+            <Badge className="border-orange-500/20 bg-orange-500/10 px-1.5 py-0 text-xs text-orange-300">
+              {exercise.muscleGroup.replace("_", " ")}
+            </Badge>
+          )}
           {exercise.equipment && (
             <Badge className="border-white/10 bg-white/5 px-1.5 py-0 text-xs text-zinc-400">
               {exercise.equipment}

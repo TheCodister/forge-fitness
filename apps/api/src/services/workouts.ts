@@ -15,6 +15,20 @@ import {
 } from "../generated/prisma/client.js";
 import { ApiError } from "../lib/errors.js";
 import { prisma } from "../lib/prisma.js";
+import { withResolvedImage } from "./exercises.js";
+
+type WithExercise = { exercise?: { exerciseDbId?: string | null; gifUrl?: string | null } | null };
+type WithExercises = { exercises?: WithExercise[] };
+
+function resolveExerciseImages<T extends WithExercises>(row: T): T {
+  if (!row?.exercises) return row;
+  return {
+    ...row,
+    exercises: row.exercises.map((e) =>
+      e.exercise ? { ...e, exercise: withResolvedImage(e.exercise) } : e,
+    ),
+  };
+}
 
 const templateInclude = {
   exercises: {
@@ -43,11 +57,12 @@ function toSessionExerciseCreateMany(exercises: WorkoutTemplateExercise[]) {
 }
 
 export async function listWorkoutTemplates(userId: string) {
-  return prisma.workoutTemplate.findMany({
+  const rows = await prisma.workoutTemplate.findMany({
     where: { userId },
     include: templateInclude,
     orderBy: { updatedAt: "desc" },
   });
+  return rows.map(resolveExerciseImages);
 }
 
 export async function getWorkoutTemplate(userId: string, id: string) {
@@ -60,13 +75,13 @@ export async function getWorkoutTemplate(userId: string, id: string) {
     throw new ApiError(404, "TEMPLATE_NOT_FOUND", "Workout template not found.");
   }
 
-  return template;
+  return resolveExerciseImages(template);
 }
 
 export async function createWorkoutTemplate(userId: string, input: unknown) {
   const parsed = workoutTemplateSchema.parse(input);
 
-  return prisma.workoutTemplate.create({
+  const created = await prisma.workoutTemplate.create({
     data: {
       userId,
       name: parsed.name,
@@ -82,6 +97,7 @@ export async function createWorkoutTemplate(userId: string, input: unknown) {
     },
     include: templateInclude,
   });
+  return resolveExerciseImages(created);
 }
 
 export async function updateWorkoutTemplate(userId: string, id: string, input: unknown) {
@@ -94,7 +110,7 @@ export async function updateWorkoutTemplate(userId: string, id: string, input: u
     });
   }
 
-  return prisma.workoutTemplate.update({
+  const updated = await prisma.workoutTemplate.update({
     where: { id },
     data: {
       name: parsed.name,
@@ -112,6 +128,7 @@ export async function updateWorkoutTemplate(userId: string, id: string, input: u
     },
     include: templateInclude,
   });
+  return resolveExerciseImages(updated);
 }
 
 export async function deleteWorkoutTemplate(userId: string, id: string) {
@@ -122,7 +139,7 @@ export async function deleteWorkoutTemplate(userId: string, id: string) {
 export async function listWorkoutSessions(userId: string, query: unknown) {
   const parsed = workoutSessionsQuerySchema.parse(query);
 
-  return prisma.workoutSession.findMany({
+  const rows = await prisma.workoutSession.findMany({
     where: {
       userId,
       status: parsed.status as WorkoutStatus | undefined,
@@ -134,6 +151,7 @@ export async function listWorkoutSessions(userId: string, query: unknown) {
     include: sessionInclude,
     orderBy: { scheduledAt: "asc" },
   });
+  return rows.map(resolveExerciseImages);
 }
 
 export async function getWorkoutSession(userId: string, id: string) {
@@ -146,7 +164,7 @@ export async function getWorkoutSession(userId: string, id: string) {
     throw new ApiError(404, "SESSION_NOT_FOUND", "Workout session not found.");
   }
 
-  return session;
+  return resolveExerciseImages(session);
 }
 
 export async function createWorkoutSession(userId: string, input: unknown) {
@@ -162,7 +180,7 @@ export async function createWorkoutSession(userId: string, input: unknown) {
       throw new ApiError(404, "TEMPLATE_NOT_FOUND", "Workout template not found.");
     }
 
-    return prisma.workoutSession.create({
+    const fromTemplate = await prisma.workoutSession.create({
       data: {
         userId,
         templateId: template.id,
@@ -175,9 +193,10 @@ export async function createWorkoutSession(userId: string, input: unknown) {
       },
       include: sessionInclude,
     });
+    return resolveExerciseImages(fromTemplate);
   }
 
-  return prisma.workoutSession.create({
+  const custom = await prisma.workoutSession.create({
     data: {
       userId,
       name: parsed.name,
@@ -195,6 +214,7 @@ export async function createWorkoutSession(userId: string, input: unknown) {
     },
     include: sessionInclude,
   });
+  return resolveExerciseImages(custom);
 }
 
 function resolveSessionTimestamps(status?: WorkoutStatus) {
@@ -227,7 +247,7 @@ export async function updateWorkoutSession(userId: string, id: string, input: un
 
   const status = parsed.status as WorkoutStatus | undefined;
 
-  return prisma.workoutSession.update({
+  const updated = await prisma.workoutSession.update({
     where: { id },
     data: {
       name: parsed.name,
@@ -249,6 +269,7 @@ export async function updateWorkoutSession(userId: string, id: string, input: un
     },
     include: sessionInclude,
   });
+  return resolveExerciseImages(updated);
 }
 
 export async function deleteWorkoutSession(userId: string, id: string) {

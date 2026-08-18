@@ -40,9 +40,11 @@ export function ExerciseDetailDialog({ exercise, open, onOpenChange }: Props) {
             <Badge className="border-orange-500/30 bg-orange-500/10 text-orange-300">
               {exercise.category}
             </Badge>
-            <Badge className="border-white/10 bg-white/5 text-zinc-300">
-              {exercise.muscleGroup.replace("_", " ")}
-            </Badge>
+            {exercise.muscleGroup && (
+              <Badge className="border-white/10 bg-white/5 text-zinc-300">
+                {exercise.muscleGroup.replace("_", " ")}
+              </Badge>
+            )}
             {exercise.targetMuscle && (
               <Badge className="border-white/10 bg-white/5 text-zinc-300">
                 Target: {exercise.targetMuscle}

@@ -2,7 +2,15 @@ import { aiSettingsUpsertSchema, chatMessageCreateSchema } from "@forge/shared";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
+import { env } from "../config.js";
 import { assertRateLimit, getClientIp } from "../lib/rate-limit.js";
+
+function resolveCorsOrigin(origin: string | undefined): string | null {
+  if (!origin) return null;
+  if (origin.startsWith("chrome-extension://")) return origin;
+  if (env.CORS_ORIGINS.includes(origin)) return origin;
+  return null;
+}
 import {
   appendMessages,
   createConversation,
@@ -91,12 +99,22 @@ export const aiConversationRoutes: FastifyPluginAsyncZod = async (app) => {
         userMessage: content,
       });
 
-      reply.raw.writeHead(200, {
+      // Fastify's cors plugin sets ACAO via onSend, which SSE bypasses by
+      // writing directly to the raw socket. Re-attach the CORS headers here
+      // so browsers can consume the stream cross-origin.
+      const allowedOrigin = resolveCorsOrigin(request.headers.origin);
+      const sseHeaders: Record<string, string> = {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         "X-Accel-Buffering": "no",
         Connection: "keep-alive",
-      });
+        Vary: "Origin",
+      };
+      if (allowedOrigin) {
+        sseHeaders["Access-Control-Allow-Origin"] = allowedOrigin;
+        sseHeaders["Access-Control-Allow-Credentials"] = "true";
+      }
+      reply.raw.writeHead(200, sseHeaders);
 
       const emit = (data: Record<string, unknown>) => {
         if (reply.raw.writableEnded) return;

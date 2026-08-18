@@ -1,7 +1,5 @@
 import { ConversationClient } from "./conversation-client";
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return [{ conversationId: "_" }];
 }

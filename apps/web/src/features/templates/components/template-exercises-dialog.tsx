@@ -58,7 +58,7 @@ export function TemplateExercisesDialog({ template, open, onOpenChange }: Props)
                       {ex?.name ?? "Unknown exercise"}
                     </p>
                     <div className="mt-1 flex flex-wrap gap-1">
-                      {ex && (
+                      {ex?.muscleGroup && (
                         <Badge className="border-orange-500/20 bg-orange-500/10 px-1.5 py-0 text-xs text-orange-300">
                           {ex.muscleGroup.replace("_", " ")}
                         </Badge>

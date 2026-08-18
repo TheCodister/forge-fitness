@@ -1,13 +1,24 @@
 import { exercisesQuerySchema } from "@forge/shared";
 
 import { ApiError } from "../lib/errors.js";
+import { getExerciseImageUrl } from "../lib/exercise-images.js";
 import { prisma } from "../lib/prisma.js";
 import type { ExerciseCategory, MuscleGroup } from "../generated/prisma/enums.js";
+
+// Legacy DB rows carry gifUrl like "/api/exercise-image/<dbId>". That path
+// no longer exists (Next API routes are gone). Rebuild gifUrl from the CDN
+// base + exerciseDbId whenever we return an exercise over HTTP.
+export function withResolvedImage<T extends { exerciseDbId?: string | null; gifUrl?: string | null }>(
+  exercise: T,
+): T {
+  if (!exercise.exerciseDbId) return exercise;
+  return { ...exercise, gifUrl: getExerciseImageUrl(exercise.exerciseDbId) };
+}
 
 export async function listExercises(query: unknown) {
   const parsed = exercisesQuerySchema.parse(query);
 
-  return prisma.exercise.findMany({
+  const rows = await prisma.exercise.findMany({
     where: {
       isActive: true,
       category: parsed.category as ExerciseCategory | undefined,
@@ -24,6 +35,8 @@ export async function listExercises(query: unknown) {
     take: parsed.limit,
     skip: parsed.offset,
   });
+
+  return rows.map(withResolvedImage);
 }
 
 export async function getExerciseById(id: string) {
@@ -33,7 +46,7 @@ export async function getExerciseById(id: string) {
     throw new ApiError(404, "EXERCISE_NOT_FOUND", "Exercise not found.");
   }
 
-  return exercise;
+  return withResolvedImage(exercise);
 }
 
 export async function assertKnownExerciseDbIds(exerciseIds: string[]) {
