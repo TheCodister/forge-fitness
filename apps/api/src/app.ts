@@ -15,6 +15,7 @@ import { authPlugin } from "./plugins/auth.js";
 import { registerErrorHandler } from "./plugins/error-handler.js";
 import { aiConversationRoutes, aiSettingsRoutes } from "./routes/ai.js";
 import { authRoutes } from "./routes/auth.js";
+import { googleOAuthRoutes } from "./routes/oauth.js";
 import {
   exerciseImageRoutes,
   exerciseRedirectRoutes,
@@ -64,6 +65,7 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   await app.register(healthRoutes, { prefix: "/health" });
   await app.register(authRoutes, { prefix: "/auth" });
+  await app.register(googleOAuthRoutes);
   await app.register(workoutTemplateRoutes, { prefix: "/workout-templates" });
   await app.register(workoutSessionRoutes, { prefix: "/workout-sessions" });
   await app.register(reportRoutes, { prefix: "/reports" });

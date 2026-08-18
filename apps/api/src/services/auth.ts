@@ -62,3 +62,57 @@ export function getUserById(id: string) {
     select: publicUserSelect,
   });
 }
+
+// Find or create a user for an OAuth provider identity. Links the provider
+// account to an existing user if the email already matches.
+export async function upsertOAuthUser(input: {
+  provider: string;
+  providerAccountId: string;
+  email: string;
+  name: string | null;
+  image: string | null;
+}): Promise<PublicUser> {
+  const linkedAccount = await prisma.account.findUnique({
+    where: {
+      provider_providerAccountId: {
+        provider: input.provider,
+        providerAccountId: input.providerAccountId,
+      },
+    },
+    include: { user: { select: publicUserSelect } },
+  });
+  if (linkedAccount?.user) return linkedAccount.user;
+
+  const existing = await prisma.user.findUnique({
+    where: { email: input.email },
+    select: publicUserSelect,
+  });
+  if (existing) {
+    await prisma.account.create({
+      data: {
+        userId: existing.id,
+        type: "oauth",
+        provider: input.provider,
+        providerAccountId: input.providerAccountId,
+      },
+    });
+    return existing;
+  }
+
+  return prisma.user.create({
+    data: {
+      email: input.email,
+      name: input.name,
+      image: input.image,
+      emailVerified: new Date(),
+      accounts: {
+        create: {
+          type: "oauth",
+          provider: input.provider,
+          providerAccountId: input.providerAccountId,
+        },
+      },
+    },
+    select: publicUserSelect,
+  });
+}

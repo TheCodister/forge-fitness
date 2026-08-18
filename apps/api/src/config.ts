@@ -20,6 +20,10 @@ const schema = z.object({
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
   ENCRYPTION_SECRET: z.string().optional(),
   GEMINI_API_KEY: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GOOGLE_CALLBACK_URL: z.string().url().optional(),
+  POST_LOGIN_REDIRECT_URL: z.string().url().default("http://localhost:3000/dashboard"),
 });
 
 export const env = schema.parse(process.env);
