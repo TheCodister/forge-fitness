@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 
 import { prisma } from "@/lib/db/prisma";
 import { ApiError } from "@/lib/http";
-import { signupSchema } from "@/lib/schemas/auth";
+import { signupSchema } from "@forge/shared";
 import { authOptions } from "@/lib/auth/auth-options";
 
 export async function signupUser(input: unknown) {

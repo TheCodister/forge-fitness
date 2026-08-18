@@ -1,3 +1,5 @@
-// Zod schemas moved from apps/web/src/lib/schemas will be re-exported here.
-// Populated in task #3.
-export {};
+export * from "./enums.js";
+export * from "./auth.js";
+export * from "./ai.js";
+export * from "./exercises.js";
+export * from "./workouts.js";

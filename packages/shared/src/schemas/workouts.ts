@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { WorkoutStatus } from "@/generated/prisma/client";
+import { workoutStatusSchema } from "./enums.js";
 
 export const templateExerciseInputSchema = z.object({
   exerciseId: z.string().min(1),
@@ -51,13 +51,13 @@ export const workoutSessionCreateSchema = z
 export const workoutSessionUpdateSchema = z.object({
   name: z.string().trim().min(2).max(80).optional(),
   scheduledAt: z.iso.datetime().optional(),
-  status: z.nativeEnum(WorkoutStatus).optional(),
+  status: workoutStatusSchema.optional(),
   comments: z.string().trim().max(400).nullable().optional(),
   exercises: z.array(sessionExerciseInputSchema).min(1).optional(),
 });
 
 export const workoutSessionsQuerySchema = z.object({
-  status: z.nativeEnum(WorkoutStatus).optional(),
+  status: workoutStatusSchema.optional(),
   from: z.iso.datetime().optional(),
   to: z.iso.datetime().optional(),
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { loginSchema, signupSchema } from "@/lib/schemas/auth";
+import { loginSchema, signupSchema } from "./auth.js";
 
 describe("loginSchema", () => {
   it("accepts the credentials used by the e2e suite", () => {

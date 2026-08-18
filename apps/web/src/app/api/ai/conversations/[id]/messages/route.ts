@@ -5,7 +5,7 @@ import { getDecryptedAiSettings } from "@/lib/server/ai-settings";
 import { appendMessages, getConversation, updateConversationTitle } from "@/lib/server/chat";
 import { runTrainerAgent } from "@/lib/server/ai-agent";
 import { generateConversationTitle } from "@/lib/server/ai-title";
-import { chatMessageCreateSchema } from "@/lib/schemas/ai";
+import { chatMessageCreateSchema } from "@forge/shared";
 import { assertRateLimit, getClientIp } from "@/lib/server/rate-limit";
 
 

@@ -1,4 +1,4 @@
-import { signupSchema } from "@/lib/schemas/auth";
+import { signupSchema } from "@forge/shared";
 import { signupUser } from "@/lib/server/auth";
 import { assertRateLimit, getClientIp } from "@/lib/server/rate-limit";
 import { handleRouteError, jsonOk, parseJsonBody } from "@/lib/http";

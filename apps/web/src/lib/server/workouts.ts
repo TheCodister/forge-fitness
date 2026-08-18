@@ -13,7 +13,7 @@ import {
   workoutSessionsQuerySchema,
   workoutTemplateSchema,
   workoutTemplateUpdateSchema,
-} from "@/lib/schemas/workouts";
+} from "@forge/shared";
 
 const templateInclude = {
   exercises: {

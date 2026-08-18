@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
+    "@forge/shared": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "@langchain/anthropic": "^1.3.28",
     "@langchain/core": "^1.1.44",

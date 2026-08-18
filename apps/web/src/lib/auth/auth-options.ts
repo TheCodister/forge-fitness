@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 import { prisma } from "@/lib/db/prisma";
-import { loginSchema } from "@/lib/schemas/auth";
+import { loginSchema } from "@forge/shared";
 import { assertRateLimit, getClientIpFromHeaders } from "@/lib/server/rate-limit";
 
 export const authOptions: NextAuthOptions = {

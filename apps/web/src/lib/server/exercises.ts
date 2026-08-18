@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { ApiError } from "@/lib/http";
-import { exercisesQuerySchema } from "@/lib/schemas/exercises";
+import { exercisesQuerySchema } from "@forge/shared";
 
 export async function listExercises(query: unknown) {
   const parsed = exercisesQuerySchema.parse(query);

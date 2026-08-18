@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { ApiError } from "@/lib/http";
-import { aiSettingsUpsertSchema } from "@/lib/schemas/ai";
+import { aiSettingsUpsertSchema } from "@forge/shared";
 import { decryptApiKey, encryptApiKey, maskApiKey } from "./ai-crypto";
 
 export async function getAiSettings(userId: string) {

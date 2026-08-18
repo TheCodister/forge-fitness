@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-export const aiProviderSchema = z.enum(["openai", "anthropic", "google"]);
+import { aiProviderSchema } from "./enums.js";
+
+export { aiProviderSchema };
 
 export const aiSettingsUpsertSchema = z.object({
   provider: aiProviderSchema,
@@ -11,3 +13,6 @@ export const aiSettingsUpsertSchema = z.object({
 export const chatMessageCreateSchema = z.object({
   content: z.string().trim().min(1).max(4000),
 });
+
+export type AiSettingsUpsertInput = z.infer<typeof aiSettingsUpsertSchema>;
+export type ChatMessageCreateInput = z.infer<typeof chatMessageCreateSchema>;
