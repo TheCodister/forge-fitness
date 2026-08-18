@@ -14,6 +14,11 @@ import { env } from "./config.js";
 import { authPlugin } from "./plugins/auth.js";
 import { registerErrorHandler } from "./plugins/error-handler.js";
 import { authRoutes } from "./routes/auth.js";
+import {
+  exerciseImageRoutes,
+  exerciseRedirectRoutes,
+  exerciseRoutes,
+} from "./routes/exercises.js";
 import { healthRoutes } from "./routes/health.js";
 import {
   reportRoutes,
@@ -61,6 +66,9 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(workoutTemplateRoutes, { prefix: "/workout-templates" });
   await app.register(workoutSessionRoutes, { prefix: "/workout-sessions" });
   await app.register(reportRoutes, { prefix: "/reports" });
+  await app.register(exerciseRoutes, { prefix: "/exercises" });
+  await app.register(exerciseImageRoutes, { prefix: "/exercises/image" });
+  await app.register(exerciseRedirectRoutes, { prefix: "/exercise-image" });
 
   return app;
 }
