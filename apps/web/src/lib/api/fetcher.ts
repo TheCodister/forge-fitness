@@ -15,13 +15,10 @@ export class ClientApiError extends Error {
   }
 }
 
-function resolveUrl(input: RequestInfo): RequestInfo {
+export function resolveUrl(input: RequestInfo): RequestInfo {
   if (typeof input !== "string") return input;
   if (input.startsWith("http://") || input.startsWith("https://")) return input;
   if (!API_BASE_URL) return input;
-  if (input.startsWith("/api/")) {
-    return `${API_BASE_URL}${input.replace(/^\/api/, "")}`;
-  }
   if (input.startsWith("/")) return `${API_BASE_URL}${input}`;
   return input;
 }

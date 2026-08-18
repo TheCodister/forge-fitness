@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { resolveUrl } from "@/lib/api/fetcher";
 
 export type TextMessage = {
   role: "user" | "assistant";
@@ -44,7 +45,7 @@ export function useChat(conversationId: string, initialMessages: DisplayMessage[
       ]);
 
       try {
-        const response = await fetch(`/api/ai/conversations/${conversationId}/messages`, {
+        const response = await fetch(resolveUrl(`/ai/conversations/${conversationId}/messages`), {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

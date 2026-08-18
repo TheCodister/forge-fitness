@@ -13,6 +13,7 @@ import {
 import { env } from "./config.js";
 import { authPlugin } from "./plugins/auth.js";
 import { registerErrorHandler } from "./plugins/error-handler.js";
+import { aiConversationRoutes, aiSettingsRoutes } from "./routes/ai.js";
 import { authRoutes } from "./routes/auth.js";
 import {
   exerciseImageRoutes,
@@ -69,6 +70,8 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(exerciseRoutes, { prefix: "/exercises" });
   await app.register(exerciseImageRoutes, { prefix: "/exercises/image" });
   await app.register(exerciseRedirectRoutes, { prefix: "/exercise-image" });
+  await app.register(aiSettingsRoutes, { prefix: "/ai/settings" });
+  await app.register(aiConversationRoutes, { prefix: "/ai/conversations" });
 
   return app;
 }

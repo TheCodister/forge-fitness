@@ -18,6 +18,8 @@ const schema = z.object({
     .default("http://localhost:3000")
     .transform((v) => v.split(",").map((s) => s.trim()).filter(Boolean)),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
+  ENCRYPTION_SECRET: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
 });
 
 export const env = schema.parse(process.env);
