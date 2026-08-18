@@ -15,6 +15,11 @@ import { authPlugin } from "./plugins/auth.js";
 import { registerErrorHandler } from "./plugins/error-handler.js";
 import { authRoutes } from "./routes/auth.js";
 import { healthRoutes } from "./routes/health.js";
+import {
+  reportRoutes,
+  workoutSessionRoutes,
+  workoutTemplateRoutes,
+} from "./routes/workouts.js";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -53,6 +58,9 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   await app.register(healthRoutes, { prefix: "/health" });
   await app.register(authRoutes, { prefix: "/auth" });
+  await app.register(workoutTemplateRoutes, { prefix: "/workout-templates" });
+  await app.register(workoutSessionRoutes, { prefix: "/workout-sessions" });
+  await app.register(reportRoutes, { prefix: "/reports" });
 
   return app;
 }
