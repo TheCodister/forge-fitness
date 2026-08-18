@@ -2,7 +2,7 @@ import { exercisesQuerySchema } from "@forge/shared";
 
 import { ApiError } from "../lib/errors.js";
 import { prisma } from "../lib/prisma.js";
-import type { ExerciseCategory, MuscleGroup } from "../generated/prisma/client.js";
+import type { ExerciseCategory, MuscleGroup } from "../generated/prisma/enums.js";
 
 export async function listExercises(query: unknown) {
   const parsed = exercisesQuerySchema.parse(query);

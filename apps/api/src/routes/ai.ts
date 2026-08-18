@@ -1,5 +1,5 @@
 import { aiSettingsUpsertSchema, chatMessageCreateSchema } from "@forge/shared";
-import type { FastifyInstance } from "fastify";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
 import { assertRateLimit, getClientIp } from "../lib/rate-limit.js";
@@ -19,7 +19,7 @@ import {
 
 const idParamsSchema = z.object({ id: z.string().min(1) });
 
-export async function aiSettingsRoutes(app: FastifyInstance) {
+export const aiSettingsRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("onRequest", app.authenticate);
 
   app.get("/", async (request) => getAiSettings(request.userId));
@@ -29,9 +29,9 @@ export async function aiSettingsRoutes(app: FastifyInstance) {
     { schema: { body: aiSettingsUpsertSchema } },
     async (request) => upsertAiSettings(request.userId, request.body),
   );
-}
+};
 
-export async function aiConversationRoutes(app: FastifyInstance) {
+export const aiConversationRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("onRequest", app.authenticate);
 
   app.get("/", async (request) => listConversations(request.userId));
@@ -169,4 +169,4 @@ export async function aiConversationRoutes(app: FastifyInstance) {
       return reply;
     },
   );
-}
+};

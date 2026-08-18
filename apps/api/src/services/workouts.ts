@@ -7,8 +7,8 @@ import {
   workoutTemplateUpdateSchema,
 } from "@forge/shared";
 
+import { WorkoutStatus } from "../generated/prisma/enums.js";
 import {
-  WorkoutStatus,
   type Prisma,
   type WorkoutSessionExercise,
   type WorkoutTemplateExercise,

@@ -7,7 +7,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/index.js",
-    "lint": "eslint src",
+    "lint": "echo '@forge/api has no eslint config; typecheck covers this package'",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

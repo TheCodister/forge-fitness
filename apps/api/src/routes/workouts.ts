@@ -6,7 +6,7 @@ import {
   workoutTemplateSchema,
   workoutTemplateUpdateSchema,
 } from "@forge/shared";
-import type { FastifyInstance } from "fastify";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
 import {
@@ -26,7 +26,7 @@ import {
 
 const idParamsSchema = z.object({ id: z.string().min(1) });
 
-export async function workoutTemplateRoutes(app: FastifyInstance) {
+export const workoutTemplateRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("onRequest", app.authenticate);
 
   app.get("/", async (request) => listWorkoutTemplates(request.userId));
@@ -61,9 +61,9 @@ export async function workoutTemplateRoutes(app: FastifyInstance) {
       return reply.status(204).send();
     },
   );
-}
+};
 
-export async function workoutSessionRoutes(app: FastifyInstance) {
+export const workoutSessionRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("onRequest", app.authenticate);
 
   app.get(
@@ -102,9 +102,9 @@ export async function workoutSessionRoutes(app: FastifyInstance) {
       return reply.status(204).send();
     },
   );
-}
+};
 
-export async function reportRoutes(app: FastifyInstance) {
+export const reportRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("onRequest", app.authenticate);
 
   app.get("/summary", async (request) => getSummaryReport(request.userId));
@@ -114,4 +114,4 @@ export async function reportRoutes(app: FastifyInstance) {
     { schema: { querystring: progressQuerySchema } },
     async (request) => getProgressReport(request.userId, request.query),
   );
-}
+};

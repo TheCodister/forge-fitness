@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
 import { ApiError } from "../lib/errors.js";
@@ -92,7 +92,7 @@ async function readBoundedBody(response: Response) {
   return body;
 }
 
-export async function exerciseRoutes(app: FastifyInstance) {
+export const exerciseRoutes: FastifyPluginAsyncZod = async (app) => {
   app.get(
     "/",
     { schema: { querystring: querySchema } },
@@ -104,9 +104,9 @@ export async function exerciseRoutes(app: FastifyInstance) {
     { schema: { params: idParamsSchema } },
     async (request) => getExerciseById(request.params.id),
   );
-}
+};
 
-export async function exerciseImageRoutes(app: FastifyInstance) {
+export const exerciseImageRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook("onRequest", app.authenticate);
 
   const querySchema = z.object({
@@ -205,15 +205,15 @@ export async function exerciseImageRoutes(app: FastifyInstance) {
       reply
         .header("Content-Type", contentType)
         .header("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
-      return reply.send(Buffer.from(body));
+      return reply.send(Buffer.from(body as ArrayBufferLike));
     },
   );
-}
+};
 
-export async function exerciseRedirectRoutes(app: FastifyInstance) {
+export const exerciseRedirectRoutes: FastifyPluginAsyncZod = async (app) => {
   app.get(
     "/:id",
     { schema: { params: idParamsSchema } },
     async (request, reply) => reply.redirect(getExerciseImageUrl(request.params.id), 302),
   );
-}
+};

@@ -1,5 +1,5 @@
 import { loginSchema, signupSchema } from "@forge/shared";
-import type { FastifyInstance } from "fastify";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
 import { env } from "../config.js";
@@ -16,7 +16,7 @@ const publicUserSchema = z.object({
   createdAt: z.date().or(z.string()),
 });
 
-export async function authRoutes(app: FastifyInstance) {
+export const authRoutes: FastifyPluginAsyncZod = async (app) => {
   app.post(
     "/signup",
     {
@@ -101,4 +101,4 @@ export async function authRoutes(app: FastifyInstance) {
       return { user };
     },
   );
-}
+};

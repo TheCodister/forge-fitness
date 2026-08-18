@@ -1,10 +1,12 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyError, FastifyInstance } from "fastify";
 import { ZodError } from "zod";
 
 import { ApiError } from "../lib/errors.js";
 
+type ValidationIssue = { instancePath: string; message?: string };
+
 export function registerErrorHandler(app: FastifyInstance) {
-  app.setErrorHandler((error, request, reply) => {
+  app.setErrorHandler((error: FastifyError, request, reply) => {
     if (error instanceof ZodError) {
       return reply.status(400).send({
         message: "Validation failed.",
@@ -23,11 +25,12 @@ export function registerErrorHandler(app: FastifyInstance) {
 
     // fastify-zod validation errors surface as validation
     if (error.validation) {
+      const issues = error.validation as unknown as ValidationIssue[];
       return reply.status(400).send({
         message: "Validation failed.",
         code: "VALIDATION_ERROR",
-        fieldErrors: error.validation.reduce<Record<string, string[]>>((acc, issue) => {
-          const key = issue.instancePath.replace(/^\//, "") || "_";
+        fieldErrors: issues.reduce<Record<string, string[]>>((acc, issue) => {
+          const key = (issue.instancePath ?? "").replace(/^\//, "") || "_";
           (acc[key] ??= []).push(issue.message ?? "invalid");
           return acc;
         }, {}),
