@@ -4,7 +4,6 @@
   "installCommand": "echo skip",
   "functions": {
     "api/index.ts": {
-      "runtime": "nodejs22.x",
       "maxDuration": 60,
       "includeFiles": "src/generated/**/*"
     }
