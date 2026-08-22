@@ -144,8 +144,13 @@ jobs:
       CORS_ORIGINS: "http://127.0.0.1:3000"
       NEXT_PUBLIC_API_URL: http://127.0.0.1:4000
       E2E_BASE_URL: http://127.0.0.1:3000
+      E2E_API_URL: http://127.0.0.1:4000
       E2E_USER_EMAIL: benqa@gmail.com
       E2E_USER_PASSWORD: 123456789ben
+      # Playwright config launches both servers by default; we start them
+      # explicitly in the steps below so their logs land in the workflow
+      # output and readiness is enforced before playwright runs.
+      E2E_SKIP_WEB_SERVER: "1"
 
     steps:
       - uses: actions/checkout@v7
@@ -190,8 +195,49 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @forge/web exec playwright install --with-deps chromium
 
+      - name: Start Fastify API in background
+        run: |
+          mkdir -p logs
+          nohup pnpm --filter @forge/api run dev > logs/api.log 2>&1 &
+          echo $! > logs/api.pid
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4000/health > /dev/null; then
+              echo "api ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "api never became ready"
+          tail -n 200 logs/api.log
+          exit 1
+
+      - name: Start Next.js web in background
+        run: |
+          nohup pnpm --filter @forge/web exec next dev --port 3000 > logs/web.log 2>&1 &
+          echo $! > logs/web.pid
+          for i in {1..90}; do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then
+              echo "web ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "web never became ready"
+          tail -n 200 logs/web.log
+          exit 1
+
       - name: Run Playwright tests
         run: pnpm --filter @forge/web run test:e2e
+
+      - name: Dump server logs on failure
+        if: failure()
+        run: |
+          echo "===== api.log ====="; tail -n 400 logs/api.log || true
+          echo "===== web.log ====="; tail -n 400 logs/web.log || true
+
+      - name: Stop background servers
+        if: always()
+        run: |
+          [ -f logs/api.pid ] && kill "$(cat logs/api.pid)" 2>/dev/null || true
+          [ -f logs/web.pid ] && kill "$(cat logs/web.pid)" 2>/dev/null || true
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
