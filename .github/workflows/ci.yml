@@ -17,12 +17,18 @@ env:
 
 jobs:
   static:
-    name: Lint and typecheck
+    name: Lint + typecheck (${{ matrix.pkg }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg: ["@forge/shared", "@forge/api", "@forge/web"]
 
     env:
-      # Same reason as the unit job: prisma.config.ts resolves this eagerly.
+      # prisma.config.ts in apps/api resolves env("DATABASE_URL") eagerly.
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/unused
+      JWT_SECRET: ci-jwt-secret-please-be-at-least-32-chars-long
+      NEXT_PUBLIC_API_URL: http://127.0.0.1:4000
 
     steps:
       - uses: actions/checkout@v7
@@ -39,26 +45,47 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma client
-        # tsc resolves @/generated/prisma, so the client must exist first.
-        run: pnpm exec prisma generate
+      - name: Build @forge/shared
+        run: pnpm --filter @forge/shared run build
+
+      - name: Generate Prisma client (api only)
+        if: matrix.pkg == '@forge/api'
+        run: pnpm --filter @forge/api exec prisma generate
 
       - name: Typecheck
-        run: pnpm typecheck
+        run: pnpm --filter ${{ matrix.pkg }} run typecheck
 
       - name: Lint
-        # No --max-warnings yet: the repo carries 8 pre-existing warnings.
-        # Clear those first, then gate on it.
-        run: pnpm lint
+        run: pnpm --filter ${{ matrix.pkg }} run lint
 
   unit:
-    name: Unit tests
+    name: Unit tests (${{ matrix.pkg }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg: ["@forge/shared", "@forge/api", "@forge/web"]
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: forge_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
 
     env:
-      # prisma.config.ts resolves env("DATABASE_URL") eagerly, so `prisma generate`
-      # fails without it. Nothing here connects: the unit tests mock the client.
-      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/unused
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/forge_test
+      JWT_SECRET: ci-jwt-secret-please-be-at-least-32-chars-long
+      ENCRYPTION_SECRET: "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff"
+      NEXT_PUBLIC_API_URL: http://127.0.0.1:4000
 
     steps:
       - uses: actions/checkout@v7
@@ -75,17 +102,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma client
-        run: pnpm exec prisma generate
+      - name: Build @forge/shared
+        run: pnpm --filter @forge/shared run build
 
-      - name: Run vitest
-        run: pnpm test
+      - name: Generate Prisma client (api only)
+        if: matrix.pkg == '@forge/api'
+        run: pnpm --filter @forge/api exec prisma generate
+
+      - name: Push schema (api only)
+        if: matrix.pkg == '@forge/api'
+        run: pnpm --filter @forge/api exec prisma db push
+
+      - name: Run tests
+        run: pnpm --filter ${{ matrix.pkg }} run test
 
   e2e:
     name: E2E tests (Playwright)
     runs-on: ubuntu-latest
-    # Both are fast and run in parallel; no point spending two minutes on a
-    # build that already fails to typecheck.
     needs: [static, unit]
 
     services:
@@ -105,17 +138,19 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/forge_test
-      NEXTAUTH_URL: http://127.0.0.1:3000
-      NEXTAUTH_SECRET: ci-nextauth-secret-not-for-production
-      # ai-crypto requires exactly 32 bytes of hex. Quoted: YAML would otherwise
-      # read an unquoted run of digits as the number 0.
+      JWT_SECRET: ci-jwt-secret-please-be-at-least-32-chars-long
       ENCRYPTION_SECRET: "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff"
-      # NextAuth builds the Google provider eagerly; placeholders keep it from throwing.
-      GOOGLE_CLIENT_ID: ci-google-client-id
-      GOOGLE_CLIENT_SECRET: ci-google-client-secret
+      COOKIE_SECURE: "false"
+      CORS_ORIGINS: "http://127.0.0.1:3000"
+      NEXT_PUBLIC_API_URL: http://127.0.0.1:4000
       E2E_BASE_URL: http://127.0.0.1:3000
+      E2E_API_URL: http://127.0.0.1:4000
       E2E_USER_EMAIL: benqa@gmail.com
       E2E_USER_PASSWORD: 123456789ben
+      # Playwright config launches both servers by default; we start them
+      # explicitly in the steps below so their logs land in the workflow
+      # output and readiness is enforced before playwright runs.
+      E2E_SKIP_WEB_SERVER: "1"
 
     steps:
       - uses: actions/checkout@v7
@@ -132,21 +167,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build @forge/shared
+        run: pnpm --filter @forge/shared run build
+
       - name: Generate Prisma client
-        run: pnpm exec prisma generate
+        run: pnpm --filter @forge/api exec prisma generate
 
       - name: Push schema to the test database
-        # Prisma 7 dropped --skip-generate from `db push`.
-        run: pnpm exec prisma db push
+        run: pnpm --filter @forge/api exec prisma db push
 
       - name: Seed exercise catalog
-        run: pnpm db:seed
+        run: pnpm --filter @forge/api run db:seed
 
       - name: Seed e2e test user
-        run: pnpm db:seed:test-user
+        run: pnpm --filter @forge/api run db:seed:test-user
 
-      - name: Build application
-        run: pnpm build
+      - name: Build web
+        run: pnpm --filter @forge/web run build
 
       - name: Cache Playwright browsers
         uses: actions/cache@v6
@@ -156,15 +193,56 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browser
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm --filter @forge/web exec playwright install --with-deps chromium
+
+      - name: Start Fastify API in background
+        run: |
+          mkdir -p logs
+          nohup pnpm --filter @forge/api run dev > logs/api.log 2>&1 &
+          echo $! > logs/api.pid
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4000/health > /dev/null; then
+              echo "api ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "api never became ready"
+          tail -n 200 logs/api.log
+          exit 1
+
+      - name: Start Next.js web in background
+        run: |
+          nohup pnpm --filter @forge/web exec next dev --port 3000 > logs/web.log 2>&1 &
+          echo $! > logs/web.pid
+          for i in {1..90}; do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then
+              echo "web ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "web never became ready"
+          tail -n 200 logs/web.log
+          exit 1
 
       - name: Run Playwright tests
-        run: pnpm test:e2e
+        run: pnpm --filter @forge/web run test:e2e
+
+      - name: Dump server logs on failure
+        if: failure()
+        run: |
+          echo "===== api.log ====="; tail -n 400 logs/api.log || true
+          echo "===== web.log ====="; tail -n 400 logs/web.log || true
+
+      - name: Stop background servers
+        if: always()
+        run: |
+          [ -f logs/api.pid ] && kill "$(cat logs/api.pid)" 2>/dev/null || true
+          [ -f logs/web.pid ] && kill "$(cat logs/web.pid)" 2>/dev/null || true
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report
-          path: playwright-report/
+          path: apps/web/playwright-report/
           retention-days: 7

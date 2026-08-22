@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd ../.. && pnpm install --frozen-lockfile --filter @forge/api... && pnpm --filter @forge/shared run build && pnpm --filter @forge/api exec prisma generate",
+  "installCommand": "echo skip",
+  "functions": {
+    "api/index.ts": {
+      "runtime": "nodejs22.x",
+      "maxDuration": 60,
+      "includeFiles": "src/generated/**/*"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ]
+}

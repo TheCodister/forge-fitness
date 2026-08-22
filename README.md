@@ -296,6 +296,111 @@ pnpm test:watch
   - Referrer-Policy: strict-origin-when-cross-origin
   - Permissions-Policy: camera, microphone, geolocation disabled
 
+## 🚢 Deployment
+
+The monorepo splits into two independently deployable artifacts:
+
+- **`@forge/web`** — Next.js static export served from a CDN (Amplify Hosting).
+- **`@forge/api`** — Fastify server packaged as a container image (ECS Fargate).
+
+### Web (AWS Amplify Hosting)
+
+`apps/web/amplify.yml` defines the build. Amplify installs the workspace from
+the repo root and outputs static assets to `apps/web/out/`.
+
+Required app env vars:
+
+| Var                    | Value                            |
+| ---------------------- | -------------------------------- |
+| `NEXT_PUBLIC_API_URL`  | `https://<api-domain>` (no `/api`) |
+
+SPA fallback rewrites (Amplify console → *Rewrites and redirects*). Dynamic
+`[id]` routes pre-render a placeholder HTML at `/<segment>/_/index.html`;
+deep links must rewrite to the placeholder so the client hook can read the id
+from the URL and fetch the real record. **Per-segment**, not a single blanket
+rule — a blanket `/index.html` rewrite would render the root route instead:
+
+```
+/workouts/<*>   →  /workouts/_/index.html    200 (Rewrite)
+/templates/<*>  →  /templates/_/index.html   200 (Rewrite)
+/trainer/<*>    →  /trainer/_/index.html     200 (Rewrite)
+```
+
+Place these above any generic 404 fallback. Static siblings (`/workouts`,
+`/workouts/new`) still serve their own HTML files.
+
+Security headers ship in `amplify.yml` (`X-Frame-Options`, `X-Content-Type-Options`,
+`Referrer-Policy`, `Permissions-Policy`) since `output: 'export'` disables Next's
+`headers()` config.
+
+### API (ECS Fargate)
+
+Build the container image from repo root:
+
+```bash
+docker build -f apps/api/Dockerfile -t forge-api:latest .
+```
+
+Task definition notes:
+
+- **Port**: `4000` (matches `PORT` default in `apps/api/src/config.ts`).
+- **Health check**: `HEALTHCHECK` in the Dockerfile probes `GET /health`; ALB
+  target group should also point at `/health`.
+- **Command**: image `CMD` is `node dist/index.js`; no override needed.
+- **Prisma migrations**: run `pnpm --filter @forge/api exec prisma migrate deploy`
+  as a one-shot task or CI step before rollout — the runtime image excludes the
+  Prisma CLI.
+
+Required env vars:
+
+| Var                       | Notes                                                     |
+| ------------------------- | --------------------------------------------------------- |
+| `DATABASE_URL`            | Postgres connection string                                |
+| `JWT_SECRET`              | ≥32 chars, used to sign `ff_token`                        |
+| `JWT_TTL_SECONDS`         | Optional, default 604800 (7 days)                         |
+| `ENCRYPTION_SECRET`       | 32-byte hex, encrypts per-user AI API keys at rest        |
+| `COOKIE_DOMAIN`           | Set to shared eTLD+1 if web + api live on different hosts |
+| `COOKIE_SECURE`           | `true` in prod                                            |
+| `CORS_ORIGINS`            | Comma-separated web origins allowed to send credentials   |
+| `GEMINI_API_KEY`          | Optional, used by conversation-title generator            |
+| `TRUST_CLIENT_IP_HEADERS` | `true` if fronted by an ALB/proxy that sets XFF           |
+
+Because `ff_token` is `SameSite=None; Secure` in production, the web and api
+domains must share a parent domain (e.g. `app.forge.example` + `api.forge.example`)
+for the cookie to flow.
+
+### Vercel fallback
+
+Both apps also deploy to Vercel if AWS is unavailable. Import each as a
+separate Vercel project (a monorepo can host multiple).
+
+**Web (`@forge/web`)** — `apps/web/vercel.json`
+- Root directory: `apps/web`
+- Framework: Next.js (auto-detected). `output: 'export'` still applies; Vercel
+  serves the emitted `out/` as static assets.
+- Env: `NEXT_PUBLIC_API_URL` = api deployment URL.
+- SPA rewrites for dynamic `[id]` routes are declared in `vercel.json`
+  (`/workouts/:id → /workouts/_/`, same for templates + trainer). Security
+  headers ship in the same file.
+
+**API (`@forge/api`)** — `apps/api/vercel.json` + `apps/api/api/index.ts`
+- Root directory: `apps/api`
+- Runtime: `nodejs22.x` serverless function. `api/index.ts` mounts the whole
+  Fastify app and dispatches every request via `app.server.emit("request",...)`.
+- `vercel.json` rewrites `/(.*) → /api` so every path lands in the function.
+- Prisma generate runs in `buildCommand`; the generated client is bundled via
+  `includeFiles`.
+- Same env vars as ECS (`DATABASE_URL`, `JWT_SECRET`, `ENCRYPTION_SECRET`,
+  `CORS_ORIGINS`, `COOKIE_DOMAIN`, `COOKIE_SECURE=true`, optional
+  `GEMINI_API_KEY`).
+- `maxDuration: 60` on the function to allow SSE streaming past the 10s hobby
+  default. Long-running SSE still terminates at the platform limit — chat
+  responses that outlast it get cut off. ECS remains preferred for streaming.
+
+Same cookie constraint applies: web and api must share an eTLD+1 for
+`SameSite=None; Secure` cookies to flow (e.g. `app.forge.example` +
+`api.forge.example`).
+
 ## 📚 Additional Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
