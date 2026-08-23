@@ -30,6 +30,9 @@ import {
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
+    // The web app is served with trailingSlash: true, so Vercel normalizes
+    // /api/auth/me to /api/auth/me/ before the proxy rewrite forwards it here.
+    routerOptions: { ignoreTrailingSlash: true },
     logger: {
       level: env.LOG_LEVEL,
       transport:
