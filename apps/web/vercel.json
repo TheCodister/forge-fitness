@@ -17,8 +17,11 @@
     }
   ],
   "rewrites": [
-    { "source": "/workouts/:id", "destination": "/workouts/_/" },
-    { "source": "/templates/:id", "destination": "/templates/_/" },
-    { "source": "/trainer/:conversationId", "destination": "/trainer/_/" }
+    { "source": "/workouts/:id/", "destination": "/workouts/_/index.html" },
+    { "source": "/workouts/:id", "destination": "/workouts/_/index.html" },
+    { "source": "/templates/:id/", "destination": "/templates/_/index.html" },
+    { "source": "/templates/:id", "destination": "/templates/_/index.html" },
+    { "source": "/trainer/:conversationId/", "destination": "/trainer/_/index.html" },
+    { "source": "/trainer/:conversationId", "destination": "/trainer/_/index.html" }
   ]
 }
