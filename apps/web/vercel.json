@@ -17,7 +17,7 @@
     }
   ],
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://forge-fitness-api.vercel.app/:path*" },
+    { "source": "/api/(.*)", "destination": "https://forge-fitness-api.vercel.app/$1" },
     { "source": "/workouts/:id/", "destination": "/workouts/_/index.html" },
     { "source": "/workouts/:id", "destination": "/workouts/_/index.html" },
     { "source": "/templates/:id/", "destination": "/templates/_/index.html" },
