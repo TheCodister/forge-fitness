@@ -11,7 +11,8 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 // `output: 'export'` is on for `next build` (production) but off during
 // `next dev` so dynamic segments like /workouts/[id]/ can resolve at
 // runtime without needing generateStaticParams to enumerate user IDs.
-// Amplify serves the built shell for unknown IDs via the SPA rewrite.
+// The per-segment rewrites in vercel.json serve the built shell for
+// unknown IDs.
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
