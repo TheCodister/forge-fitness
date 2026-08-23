@@ -1,9 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm install --frozen-lockfile --filter @forge/web... && pnpm --filter @forge/web run build",
+  "framework": null,
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile --filter @forge/web...",
+  "buildCommand": "cd ../.. && pnpm --filter @forge/web run build",
   "outputDirectory": "out",
-  "installCommand": "echo skip",
+  "trailingSlash": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -16,8 +17,11 @@
     }
   ],
   "rewrites": [
-    { "source": "/workouts/:id", "destination": "/workouts/_/" },
-    { "source": "/templates/:id", "destination": "/templates/_/" },
-    { "source": "/trainer/:conversationId", "destination": "/trainer/_/" }
+    { "source": "/workouts/:id/", "destination": "/workouts/_/index.html" },
+    { "source": "/workouts/:id", "destination": "/workouts/_/index.html" },
+    { "source": "/templates/:id/", "destination": "/templates/_/index.html" },
+    { "source": "/templates/:id", "destination": "/templates/_/index.html" },
+    { "source": "/trainer/:conversationId/", "destination": "/trainer/_/index.html" },
+    { "source": "/trainer/:conversationId", "destination": "/trainer/_/index.html" }
   ]
 }

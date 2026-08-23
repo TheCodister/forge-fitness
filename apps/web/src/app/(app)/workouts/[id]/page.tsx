@@ -1,8 +1,8 @@
 import { WorkoutDetailClient } from "./workout-detail-client";
 
 // generateStaticParams returns a sentinel so `next build --output=export`
-// prerenders one shell (/workouts/_/index.html). Amplify's SPA rewrite
-// serves that shell for any /workouts/<id>/; the client component reads
+// prerenders one shell (/workouts/_/index.html). The /workouts/:id rewrite
+// in vercel.json serves that shell for any /workouts/<id>/; the client reads
 // the real id via useParams and calls the API.
 //
 // dynamicParams is intentionally NOT exported. In dev the default (true)
