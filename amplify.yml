@@ -6,7 +6,9 @@ applications:
         preBuild:
           commands:
             - corepack enable
-            - corepack prepare pnpm@latest --activate
+            # Pin pnpm 10: pnpm 11 ignores the `pnpm.overrides` field in
+            # package.json, which desyncs it from the lockfile.
+            - corepack prepare pnpm@10.13.1 --activate
             # Install from the workspace root so workspace:* deps resolve.
             - cd ../.. && pnpm install --frozen-lockfile && cd apps/web
         build:
