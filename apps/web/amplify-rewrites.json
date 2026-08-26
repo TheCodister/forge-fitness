@@ -1,0 +1,42 @@
+[
+  {
+    "source": "/api/<*>",
+    "target": "https://forge-fitness-api.vercel.app/<*>",
+    "status": "200"
+  },
+  {
+    "source": "/workouts/<id>/",
+    "target": "/workouts/_/index.html",
+    "status": "200"
+  },
+  {
+    "source": "/workouts/<id>",
+    "target": "/workouts/_/index.html",
+    "status": "200"
+  },
+  {
+    "source": "/templates/<id>/",
+    "target": "/templates/_/index.html",
+    "status": "200"
+  },
+  {
+    "source": "/templates/<id>",
+    "target": "/templates/_/index.html",
+    "status": "200"
+  },
+  {
+    "source": "/trainer/<conversationId>/",
+    "target": "/trainer/_/index.html",
+    "status": "200"
+  },
+  {
+    "source": "/trainer/<conversationId>",
+    "target": "/trainer/_/index.html",
+    "status": "200"
+  },
+  {
+    "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|avif)$)([^.]+$)/>",
+    "target": "/index.html",
+    "status": "404-200"
+  }
+]
