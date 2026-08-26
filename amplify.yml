@@ -1,0 +1,23 @@
+version: 1
+applications:
+  - appRoot: apps/web
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - corepack enable
+            - corepack prepare pnpm@latest --activate
+            # Install from the workspace root so workspace:* deps resolve.
+            - cd ../.. && pnpm install --frozen-lockfile && cd apps/web
+        build:
+          commands:
+            - pnpm run build
+      artifacts:
+        baseDirectory: out
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - ../../node_modules/**/*
+          - node_modules/**/*
+          - .next/cache/**/*
