@@ -15,7 +15,10 @@ applications:
           commands:
             - pnpm run build
       artifacts:
-        baseDirectory: out
+        # Next.js 14+ static exports are deployed by Amplify from `.next`.
+        # This includes required-server-files.json, which Amplify validates
+        # after a successful build.
+        baseDirectory: .next
         files:
           - '**/*'
       cache:
