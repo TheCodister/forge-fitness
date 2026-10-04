@@ -51,8 +51,8 @@
   "devDependencies": {
     "@types/node": "^26",
     "eslint": "^9",
-    "prisma": "^7.8.0",
-    "tsx": "^4.19.0",
+    "prisma": "^7.10.0",
+    "tsx": "^4.23.13",
     "typescript": "^6",
     "vitest": "^4.1.5"
   },
