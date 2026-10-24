@@ -27,7 +27,7 @@
     "@fastify/helmet": "^13.0.1",
     "@fastify/jwt": "^10.0.0",
     "@fastify/oauth2": "^8.1.0",
-    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/rate-limit": "^11.2.0",
     "@fastify/sensible": "^6.0.3",
     "@forge/shared": "workspace:*",
     "@langchain/anthropic": "^1.3.28",
